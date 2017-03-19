@@ -28,9 +28,18 @@ public class ClinicManagementSystem implements ActionListener
     private int loginAttempts = 0;
 
     // components of the login window
+    private JFrame login;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JFrame mainFrame;
+    
+    private JFrame menu;
+
+     
+    public enum userTypes {
+        DOCTOR, RECEPTIONIST
+    }
+    
+    private userTypes userType;
 
 
     /*
@@ -38,87 +47,7 @@ public class ClinicManagementSystem implements ActionListener
      */ 
     public ClinicManagementSystem()
     {
-      mainFrame = new JFrame("User Login");
-
-      JLabel usernameLabel = new JLabel("Enter username: ");
-      JLabel passwordLabel = new JLabel("Enter password: ");
-
-      usernameField = new JTextField(10);
-      passwordField = new JPasswordField(10);
-      passwordField.setEchoChar('*');
-
-      JButton loginButton = new JButton("Log In");
-
-      JPanel contentPane = new JPanel();
-      mainFrame.setContentPane(contentPane);
-
-
-      // layout components using the GridBag layout manager
-
-      GridBagLayout gb = new GridBagLayout();
-      GridBagConstraints c = new GridBagConstraints();
-
-      contentPane.setLayout(gb);
-      contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-      // place the username label 
-      c.gridwidth = GridBagConstraints.RELATIVE;
-      c.insets = new Insets(10, 10, 5, 0);
-      gb.setConstraints(usernameLabel, c);
-      contentPane.add(usernameLabel);
-
-      // place the text field for the username 
-      c.gridwidth = GridBagConstraints.REMAINDER;
-      c.insets = new Insets(10, 0, 5, 10);
-      gb.setConstraints(usernameField, c);
-      contentPane.add(usernameField);
-
-      // place password label
-      c.gridwidth = GridBagConstraints.RELATIVE;
-      c.insets = new Insets(0, 10, 10, 0);
-      gb.setConstraints(passwordLabel, c);
-      contentPane.add(passwordLabel);
-
-      // place the password field 
-      c.gridwidth = GridBagConstraints.REMAINDER;
-      c.insets = new Insets(0, 0, 10, 10);
-      gb.setConstraints(passwordField, c);
-      contentPane.add(passwordField);
-
-      // place the login button
-      c.gridwidth = GridBagConstraints.REMAINDER;
-      c.insets = new Insets(5, 10, 10, 10);
-      c.anchor = GridBagConstraints.CENTER;
-      gb.setConstraints(loginButton, c);
-      contentPane.add(loginButton);
-
-      // register password field and OK button with action event handler
-      passwordField.addActionListener(this);
-      loginButton.addActionListener(this);
-
-      // anonymous inner class for closing the window
-      mainFrame.addWindowListener(new WindowAdapter() 
-      {
-	public void windowClosing(WindowEvent e) 
-	{ 
-	  System.exit(0); 
-	}
-      });
-
-      // size the window to obtain a best fit for the components
-      mainFrame.pack();
-
-      // center the frame
-      Dimension d = mainFrame.getToolkit().getScreenSize();
-      Rectangle r = mainFrame.getBounds();
-      mainFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
-
-      // make the window visible
-      mainFrame.setVisible(true);
-
-      // place the cursor in the text field for the username
-      usernameField.requestFocus();
-
+      
       try 
       {
 	// Load the Oracle JDBC driver
@@ -129,6 +58,13 @@ public class ClinicManagementSystem implements ActionListener
 	System.out.println("Message: " + ex.getMessage());
 	System.exit(-1);
       }
+      
+      if ( connect("ora_u7b8", "a34334110") )
+      	{
+	  	  // if connection is succesfull show the login screen
+	  	  // remove the login window and display a text menu 
+	  	  showLogin();     
+      	}
     }
 
 
@@ -153,18 +89,31 @@ public class ClinicManagementSystem implements ActionListener
       }
     }
 
+    /*
+     * Authenticate the user 
+     */
+    private boolean authenticate(String username, String password){
+    	boolean authenticatedUser = true;
+    	
+    	System.out.println("Username: "+ username + ", Password: "+ password);
+    	
+    	//set the user type 
+    	//userType = ...
+    	
+    	return authenticatedUser;
+    }
 
     /*
      * event handler for login window
      */ 
     public void actionPerformed(ActionEvent e) 
     {
-	if ( connect(usernameField.getText(), String.valueOf(passwordField.getPassword())) )
+	if ( authenticate(usernameField.getText(), String.valueOf(passwordField.getPassword())) )
 	{
 	  // if the username and password are valid, 
 	  // remove the login window and display a text menu 
-	  mainFrame.dispose();
-          showMenu();     
+	  login.dispose();
+      showMenu();     
 	}
 	else
 	{
@@ -172,7 +121,7 @@ public class ClinicManagementSystem implements ActionListener
 	  
 	  if (loginAttempts >= 3)
 	  {
-	      mainFrame.dispose();
+	      login.dispose();
 	      System.exit(-1);
 	  }
 	  else
@@ -188,64 +137,103 @@ public class ClinicManagementSystem implements ActionListener
     /*
      * displays simple text interface
      */ 
-    private void showMenu()
+    private void showLogin()
     {
-	int choice;
-	boolean quit;
+		JLabel usernameLabel = new JLabel("Enter username: ");
+	    JLabel passwordLabel = new JLabel("Enter password: ");
 
-	quit = false;
-	
-	try 
-	{
-	    // disable auto commit mode
-	    con.setAutoCommit(false);
+	    usernameField = new JTextField(10);
+	    passwordField = new JPasswordField(10);
+	    passwordField.setEchoChar('*');
+	    
+	    JButton loginButton = new JButton("Log In");
 
-	    while (!quit)
-	    {
-		System.out.print("\n\nPlease choose one of the following: \n");
-		System.out.print("1.  Insert branch\n");
-		System.out.print("2.  Delete branch\n");
-		System.out.print("3.  Update branch\n");
-		System.out.print("4.  Show branch\n");
-		System.out.print("5.  Quit\n>> ");
-
-		choice = Integer.parseInt(in.readLine());
+		login = new JFrame("Login");
 		
-		System.out.println(" ");
+	    JPanel contentPane = new JPanel();
+	    login.setContentPane(contentPane);
+	
+	
+	    // layout components using the GridBag layout manager
+	
+	    GridBagLayout gb = new GridBagLayout();
+	    GridBagConstraints c = new GridBagConstraints();
+	
+	    contentPane.setLayout(gb);
+	    contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	
+	    // place the username label 
+	    c.gridwidth = GridBagConstraints.RELATIVE;
+	    c.insets = new Insets(10, 10, 5, 0);
+	    gb.setConstraints(usernameLabel, c);
+	    contentPane.add(usernameLabel);
 
-		switch(choice)
-		{
-		   case 1:  insertBranch(); break;
-		   case 2:  deleteBranch(); break;
-		   case 3:  updateBranch(); break;
-		   case 4:  showBranch(); break;
-		   case 5:  quit = true;
-		}
-	    }
+		// place the text field for the username 
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.insets = new Insets(10, 0, 5, 10);
+		gb.setConstraints(usernameField, c);
+		contentPane.add(usernameField);
+		
+		// place password label
+		c.gridwidth = GridBagConstraints.RELATIVE;
+		c.insets = new Insets(0, 10, 10, 0);
+		gb.setConstraints(passwordLabel, c);
+		contentPane.add(passwordLabel);
+		
+		// place the password field 
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.insets = new Insets(0, 0, 10, 10);
+		gb.setConstraints(passwordField, c);
+		contentPane.add(passwordField);
+		
+		// place the login button
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.insets = new Insets(5, 10, 10, 10);
+		c.anchor = GridBagConstraints.CENTER;
+		gb.setConstraints(loginButton, c);
+		contentPane.add(loginButton);
 
-	    con.close();
-            in.close();
-	    System.out.println("\nGood Bye!\n\n");
-	    System.exit(0);
-	}
-	catch (IOException e)
-	{
-	    System.out.println("IOException!");
-
-	    try
+	    // register password field and OK button with action event handler
+	    passwordField.addActionListener(this);
+	    loginButton.addActionListener(this);
+	    
+	    // anonymous inner class for closing the window
+	    login.addWindowListener(new WindowAdapter() 
 	    {
-		con.close();
-		System.exit(-1);
-	    }
-	    catch (SQLException ex)
-	    {
-		 System.out.println("Message: " + ex.getMessage());
-	    }
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
-	}
+			public void windowClosing(WindowEvent e) 
+			{ 
+			  System.exit(0); 
+			}
+	    });
+	    //End of menu stuff
+	
+	    // size the window to obtain a best fit for the components
+	    login.pack();
+	
+	    // center the frame
+	    Dimension d = login.getToolkit().getScreenSize();
+	    Rectangle r = login.getBounds();
+	    login.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+	
+	    // make the window visible
+	    login.setVisible(true);
+	    
+	    // place the cursor in the text field for the username
+	    usernameField.requestFocus();		
+		
+    }
+    /*
+     * Show the main menu depending on the usertype
+     */
+    private void showMenu(){
+    	//Define the menu frame
+		menu = new JFrame("Clinic Management System");
+		
+		System.out.println("show menu called\n");
+		
+		//Make the menu visible
+	    menu.setVisible(true);
+
     }
 
 
