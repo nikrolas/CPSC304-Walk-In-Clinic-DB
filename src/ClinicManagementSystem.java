@@ -97,9 +97,22 @@ public class ClinicManagementSystem implements ActionListener
     	
     	System.out.println("Username: "+ username + ", Password: "+ password);
     	
+    	Statement stmt;
+    	ResultSet rs;
+    	//ResultSet rs = stmt.executeQuery(...)
+    	try{
+        	stmt = con.createStatement();
+    		rs = stmt.executeQuery("SELECT");
+        	stmt.close();
+
+    	}
+    	catch(SQLException ex)
+    	{
+    		System.out.println("Message: "+ex.getMessage());
+    		return false;
+    	}
     	//set the user type 
     	//userType = ...
-    	
     	return authenticatedUser;
     }
 
