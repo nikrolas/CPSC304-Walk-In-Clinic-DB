@@ -36,7 +36,7 @@ public class ClinicManagementSystem implements ActionListener
 
      
     public enum userTypes {
-        DOCTOR, RECEPTIONIST
+        DOCTOR, RECEPTIONIST, UNDEFINED
     }
     
     private userTypes userType;
@@ -93,27 +93,41 @@ public class ClinicManagementSystem implements ActionListener
      * Authenticate the user 
      */
     private boolean authenticate(String username, String password){
-    	boolean authenticatedUser = true;
-    	
     	System.out.println("Username: "+ username + ", Password: "+ password);
-    	
-    	Statement stmt;
+    	int roleID;
     	ResultSet rs;
-    	//ResultSet rs = stmt.executeQuery(...)
+    	PreparedStatement ps; 
     	try{
-        	stmt = con.createStatement();
-    		rs = stmt.executeQuery("SELECT");
-        	stmt.close();
+    		ps = con.prepareStatement("SELECT roleID FROM Users u, Roles r WHERE " +
+     			   "u.userName = ? AND u.passwordSalt = ? AND u.userID = r.userID");
+    		ps.setString(1,username);
+    		ps.setString(2,password);
+    		
+    		rs = ps.executeQuery();
+    		roleID = rs.getInt("roleID");
+        	ps.close();
 
+			switch(roleID){
+				case 0:
+					return false;
+				case 1:
+					userType = userTypes.RECEPTIONIST;
+					break;
+				case 2:
+					userType = userTypes.DOCTOR;
+					break;
+				default:
+					userType = userTypes.UNDEFINED;
+					return false;
+			}
+  
     	}
     	catch(SQLException ex)
     	{
     		System.out.println("Message: "+ex.getMessage());
     		return false;
     	}
-    	//set the user type 
-    	//userType = ...
-    	return authenticatedUser;
+    	return true;
     }
 
     /*
