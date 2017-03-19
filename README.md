@@ -3,7 +3,11 @@ CS304 Project Team 2
 
 Connect to oracle using <br />
 Username: ora_u7b8@ug <br />
-Password: a34334110
+Password: a34334110 <br />
+
+Add the two zip files in your Eclipse project under Project Properties > Java Build Path > Libraries > Add External JARS <br />
+Before running the project, set up an ssh tunnel using preferred SSH tool using: <br/>
+ssh -l \<your cs Id\> -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
 
 
 1. (1 point) Selection and projection query: pick one query of this category and provide an interface for the user to specify the selection condition and the attributes to be returned.  <br />
