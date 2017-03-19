@@ -229,7 +229,6 @@ public class ClinicManagementSystem implements ActionListener
     	//Define the menu frame
 		menu = new JFrame("Clinic Management System");
 		
-		System.out.println("show menu called\n");
 		
 		//Make the menu visible
 	    menu.setVisible(true);
