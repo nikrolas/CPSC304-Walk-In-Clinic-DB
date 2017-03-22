@@ -94,20 +94,30 @@ public class ClinicManagementSystem implements ActionListener
      */
     private boolean authenticate(String username, String password){
     	System.out.println("Username: "+ username + ", Password: "+ password);
-    	int roleID;
+    	int userID;
+    	String userName;
     	ResultSet rs;
     	PreparedStatement ps; 
     	try{
-    		ps = con.prepareStatement("SELECT roleID FROM Users u, Roles r WHERE " +
-     			   "u.userName = ? AND u.passwordSalt = ? AND u.userID = r.userID");
+    		ps = con.prepareStatement("SELECT * FROM USERS u WHERE " +
+     			   "u.USERNAME = ? AND u.PASSWORD = ?");
     		ps.setString(1,username);
     		ps.setString(2,password);
     		
     		rs = ps.executeQuery();
-    		roleID = rs.getInt("roleID");
+    		rs.next();
+    		userID = rs.getInt("userID");
+    		System.out.println("UserID was: "+userID+"\n");
+    		userName = rs.getString(2);
+    		System.out.println("UserName was: "+userName+"\n");
         	ps.close();
-
-			switch(roleID){
+        	
+        	if(userID == 0){
+        		System.out.println("Wrong username or password\n");
+        		return false;
+        	}
+ //TODO: Once roleIDs are added, set the user type.
+			/*switch(roleID){
 				case 0:
 					return false;
 				case 1:
@@ -119,7 +129,7 @@ public class ClinicManagementSystem implements ActionListener
 				default:
 					userType = userTypes.UNDEFINED;
 					return false;
-			}
+			}*/
   
     	}
     	catch(SQLException ex)
@@ -127,6 +137,8 @@ public class ClinicManagementSystem implements ActionListener
     		System.out.println("Message: "+ex.getMessage());
     		return false;
     	}
+		System.out.println("User authenticated. Welcome "+userName+"!\n");
+
     	return true;
     }
 
@@ -253,10 +265,65 @@ public class ClinicManagementSystem implements ActionListener
      * Show the main menu depending on the usertype
      */
     private void showMenu(){
+    	
+		JLabel dateLabel = new JLabel("Enter date to search appointments: ");
+	    JTextField dateField = new JTextField(10);
+	    dateField.setText("dd/mm/yyyy");
+	    JButton searchButton = new JButton("Search");
+
+
     	//Define the menu frame
 		menu = new JFrame("Clinic Management System");
 		
+		JPanel contentPane = new JPanel();
+	    menu.setContentPane(contentPane);
+	    
+	    // layout components using the GridBag layout manager
 		
+	    GridBagLayout gb = new GridBagLayout();
+	    GridBagConstraints c = new GridBagConstraints();
+	
+	    contentPane.setLayout(gb);
+	    contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    
+	    // place the date label 
+	    c.gridwidth = GridBagConstraints.RELATIVE;
+	    c.insets = new Insets(10, 10, 5, 0);
+	    gb.setConstraints(dateLabel, c);
+	    contentPane.add(dateLabel);
+		
+	    // place the text field for the date 
+ 		c.gridwidth = GridBagConstraints.REMAINDER;
+ 		c.insets = new Insets(10, 0, 5, 10);
+ 		gb.setConstraints(dateField, c);
+ 		contentPane.add(dateField);
+ 		
+		// place the login button
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.insets = new Insets(5, 10, 10, 10);
+		c.anchor = GridBagConstraints.CENTER;
+		gb.setConstraints(searchButton, c);
+		contentPane.add(searchButton);
+		
+		 // center the frame
+	    Dimension d = menu.getToolkit().getScreenSize();
+	    Rectangle r = menu.getBounds();
+	    menu.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+	    
+	    
+	    // anonymous inner class for closing the window
+	    login.addWindowListener(new WindowAdapter() 
+	    {
+			public void windowClosing(WindowEvent e) 
+			{ 
+			  System.exit(0); 
+			}
+	    });
+	    //End of menu stuff
+	
+	    // size the window to obtain a best fit for the components
+	    menu.pack();
+	    
 		//Make the menu visible
 	    menu.setVisible(true);
 
