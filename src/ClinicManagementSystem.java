@@ -32,7 +32,12 @@ public class ClinicManagementSystem implements ActionListener
     private JTextField usernameField;
     private JPasswordField passwordField;
     
-    private JFrame menu;
+    private JFrame menuFrame;
+    
+    private JMenuBar menubar;
+    private JMenu mainMenu;
+    private JMenuItem menuItem;
+    
 
      
     public enum userTypes {
@@ -100,7 +105,7 @@ public class ClinicManagementSystem implements ActionListener
     	PreparedStatement ps; 
     	try{
     		ps = con.prepareStatement("SELECT * FROM USERS WHERE " +
-     			   "USERNAME = ? AND Password = ?");
+     			   "USERNAME = ? AND \"Password\" = ?");
     		ps.setString(1, username);
     		ps.setString(2, password);
     		
@@ -266,17 +271,43 @@ public class ClinicManagementSystem implements ActionListener
      */
     private void showMenu(){
     	
+    	
+    	
 		JLabel dateLabel = new JLabel("Enter date to search appointments: ");
 	    JTextField dateField = new JTextField(10);
 	    dateField.setText("dd/mm/yyyy");
 	    JButton searchButton = new JButton("Search");
+	    
 
 
     	//Define the menu frame
-		menu = new JFrame("Clinic Management System");
+		menuFrame = new JFrame("Clinic Management System");
 		
 		JPanel contentPane = new JPanel();
-	    menu.setContentPane(contentPane);
+	    menuFrame.setContentPane(contentPane);
+	    
+	    //Define the menubar
+	    menubar = new JMenuBar();
+	    
+	    mainMenu = new JMenu("Navigation");
+	    
+	    mainMenu.setMnemonic(KeyEvent.VK_A);
+	    
+	    mainMenu.getAccessibleContext().setAccessibleDescription(
+	            "The only menu in this program that has menu items");
+
+	    menuItem = new JMenuItem("A text-only menu item",
+                KeyEvent.VK_T);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(
+		KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription(
+		"This doesn't really do anything");
+		mainMenu.add(menuItem);
+		
+	    menubar.add(mainMenu);
+
+	    
+	    menuFrame.setJMenuBar(menubar);
 	    
 	    // layout components using the GridBag layout manager
 		
@@ -306,9 +337,9 @@ public class ClinicManagementSystem implements ActionListener
 		contentPane.add(searchButton);
 		
 		 // center the frame
-	    Dimension d = menu.getToolkit().getScreenSize();
-	    Rectangle r = menu.getBounds();
-	    menu.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+	    Dimension d = menuFrame.getToolkit().getScreenSize();
+	    Rectangle r = menuFrame.getBounds();
+	    menuFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
 	    
 	    
 	    // anonymous inner class for closing the window
@@ -320,12 +351,13 @@ public class ClinicManagementSystem implements ActionListener
 			}
 	    });
 	    //End of menu stuff
+	    
 	
 	    // size the window to obtain a best fit for the components
-	    menu.pack();
+	    menuFrame.pack();
 	    
 		//Make the menu visible
-	    menu.setVisible(true);
+	    menuFrame.setVisible(true);
 
     }
 
