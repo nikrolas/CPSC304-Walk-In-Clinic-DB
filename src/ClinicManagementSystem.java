@@ -99,10 +99,10 @@ public class ClinicManagementSystem implements ActionListener
     	ResultSet rs;
     	PreparedStatement ps; 
     	try{
-    		ps = con.prepareStatement("SELECT * FROM USERS u WHERE " +
-     			   "u.USERNAME = ? AND u.PASSWORD = ?");
-    		ps.setString(1,username);
-    		ps.setString(2,password);
+    		ps = con.prepareStatement("SELECT * FROM USERS WHERE " +
+     			   "USERNAME = ? AND Password = ?");
+    		ps.setString(1, username);
+    		ps.setString(2, password);
     		
     		rs = ps.executeQuery();
     		rs.next();
