@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 
 public class MenuFrame extends JFrame {
 
@@ -16,20 +17,13 @@ public class MenuFrame extends JFrame {
 	
 	private JComboBox comboBox;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MenuFrame frame = new MenuFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public void setSelectionListener(ActionListener al) {
+		//TODO: add listener to combo box
+		comboBox.addActionListener(al);
+	}
+	
+	public int getSelection(){
+		return comboBox.getSelectedIndex();
 	}
 
 	/**

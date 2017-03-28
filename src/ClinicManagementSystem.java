@@ -58,10 +58,10 @@ public class ClinicManagementSystem
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//if(authenticate(loginFrame.getUsername(), loginFrame.getPassword())){
+			if(authenticate(loginFrame.getUsername(), loginFrame.getPassword())){
 				loginFrame.dispose();
 				showMenu();
-			//}
+			}
 			
 		}
 	});
@@ -73,6 +73,31 @@ public class ClinicManagementSystem
     private void showMenu(){
     	System.out.println("Show menu....\n");
     	menuFrame = new MenuFrame();
+    	menuFrame.setSelectionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch(menuFrame.getSelection()){
+					case(1):
+						//showUserSearchWindow()..
+						break;
+					case(2):
+						//show medications... 
+						break;
+					case(3):
+						//join medication and patients...
+						break;
+					case(4):
+						break;
+					case(5):
+						break;
+					default:
+						break;
+				}
+					
+				
+			}
+		});
     	menuFrame.pack();
     	menuFrame.setVisible(true);
     }
@@ -107,7 +132,7 @@ public class ClinicManagementSystem
     	PreparedStatement ps; 
     	try{
     		ps = con.prepareStatement("SELECT * FROM USERS WHERE " +
-     			   "USERNAME = ? AND \"Password\" = ?");
+     			   "USERNAME = ? AND \"PASSWORD\" = ?");
     		ps.setString(1, username);
     		ps.setString(2, password);
     		
