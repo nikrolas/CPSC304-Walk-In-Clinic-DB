@@ -31,6 +31,8 @@ public class ClinicManagementSystem
     
     private MenuFrame menuFrame;
     
+    private UserSearchFrame userSearchFrame;
+    
     
      
     
@@ -78,8 +80,11 @@ public class ClinicManagementSystem
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				switch(menuFrame.getSelection()){
+					case(0):
+						break;	
 					case(1):
-						//showUserSearchWindow()..
+						menuFrame.dispose();
+						showUserSearchWindow();
 						break;
 					case(2):
 						//show medications... 
@@ -100,6 +105,13 @@ public class ClinicManagementSystem
 		});
     	menuFrame.pack();
     	menuFrame.setVisible(true);
+    }
+    
+    private void showUserSearchWindow(){
+    	System.out.println("Show user search window\n");
+    	userSearchFrame = new UserSearchFrame();
+    	userSearchFrame.setVisible(true);
+    	
     }
 
     /*
