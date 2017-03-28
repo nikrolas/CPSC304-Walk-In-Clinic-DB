@@ -1,8 +1,10 @@
 
 // We need to import the java.sql package to use JDBC
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -32,6 +34,8 @@ public class ClinicManagementSystem
     private MenuFrame menuFrame;
     
     private UserSearchFrame userSearchFrame;
+    
+    private ArrayList<String> foundUsers;
     
     
      
@@ -69,6 +73,7 @@ public class ClinicManagementSystem
 	});
       loginFrame.pack();
       loginFrame.setVisible(true);
+      foundUsers = new ArrayList<String>();
     }
     
 
@@ -110,8 +115,53 @@ public class ClinicManagementSystem
     private void showUserSearchWindow(){
     	System.out.println("Show user search window\n");
     	userSearchFrame = new UserSearchFrame();
+    	userSearchFrame.setBackListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Back button presssed\n");
+				userSearchFrame.dispose();
+				showMenu();
+			}
+		});
+    	userSearchFrame.setSearchListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				searchUser(userSearchFrame.getUsername());
+				userSearchFrame.setResults(foundUsers);
+				userSearchFrame.repaint();
+			}
+		});
     	userSearchFrame.setVisible(true);
     	
+    }
+    
+    private void searchUser(String username){
+    	System.out.println("Search for username: "+username+"\n");
+    	foundUsers = new ArrayList<String>();
+    	PreparedStatement ps; 
+    	try{
+    		ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
+     			   "USERNAME like ?");
+    		ps.setString(1, username);
+        	ResultSet rs;
+
+    		rs = ps.executeQuery();
+    		while(rs.next()){
+    			System.out.println("Next result\n");
+	    		String foundUser = rs.getString("USERNAME");
+	    		foundUsers.add(foundUser);     	
+    		}
+    		
+    		System.out.println("Foundusers: "+ foundUsers);
+        	ps.close();
+  
+    	}
+    	catch(SQLException ex)
+    	{
+    		System.out.println("Message: "+ex.getMessage());
+    	}
     }
 
     /*
@@ -170,40 +220,6 @@ public class ClinicManagementSystem
 		System.out.println("User authenticated. Welcome "+userName+"!\n");
 
     	return true;
-    }
-
-   
-    
-    private void getUsers(String username){
-    	System.out.println("Username: "+ username + "\n");
-    	String user = "";
-    	ResultSet rs;
-    	PreparedStatement ps; 
-    	try{
-    		ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
-     			   "USERNAME like ?");
-    		ps.setString(1, username);
-    		
-    		rs = ps.executeQuery();
-    		rs.next();
-    		user = rs.getString("USERNAME");
-    		if(user != null){
-    			System.out.println("Set user string\n");
-    			foundUser = user;
-    		}
-    		else{
-    			foundUser = "No matching users";
-    		}
-    		System.out.println("UserName was: "+user+"\n");
-        	ps.close();
-        	  
-    	}
-    	catch(SQLException ex)
-    	{
-    		System.out.println("Message: "+ex.getMessage());
-    		
-    	}
-		System.out.println("User found: "+user+"!\n");
     }
     
     public static void main(String args[]){
