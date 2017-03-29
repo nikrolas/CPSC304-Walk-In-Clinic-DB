@@ -50,7 +50,7 @@ public class MenuFrame extends JFrame {
 		gbc_lblSelectASection.gridy = 1;
 		contentPane.add(lblSelectASection, gbc_lblSelectASection);
 		
-		String[] options = {"--------","Users", "Appointments", "Medications", "Insurance Providers", "Etc.."};
+		String[] options = {"--------","Users", "Appointments", "Patient Info", "Insurance Providers", "Etc.."};
 
 		comboBox = new JComboBox<Object>(options);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();

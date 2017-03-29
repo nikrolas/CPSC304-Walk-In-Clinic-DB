@@ -35,6 +35,7 @@ public class ClinicManagementSystem
     
     private UserSearchFrame userSearchFrame;
     private AppointmentForm appointmentForm;
+    private PatientReceptionistFrame patientInfo;
     
     private ArrayList<String> foundUsers;
     
@@ -98,7 +99,8 @@ public class ClinicManagementSystem
 						//show appointments...
 						break;
 					case(3):
-						//join medication and patients...
+						menuFrame.dispose();
+						showPatientInfo();
 						break;
 					case(4):
 						break;
@@ -153,6 +155,20 @@ public class ClinicManagementSystem
 		});
 		appointmentForm.setVisible(true);
 		appointmentForm.setTable(con);
+
+	}
+	private void showPatientInfo() {
+		System.out.println("Show patient window...\n");
+		patientInfo = new PatientReceptionistFrame();
+		patientInfo.setBackListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Back button presssed\n");
+				patientInfo.dispose();
+				showMenu();
+			}
+		});
+		patientInfo.setVisible(true);
 
 	}
 
