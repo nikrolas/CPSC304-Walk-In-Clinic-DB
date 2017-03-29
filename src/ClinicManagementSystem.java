@@ -14,7 +14,10 @@ import java.awt.event.*;
 /*
  * This class implements a graphical login window and a simple text
  * interface for interacting with the branch table 
- */ 
+ */
+
+import java.awt.*;
+import java.awt.event.*;
 
 // must have ssh active in terminal:  ssh -l <UNIX id> -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
 public class ClinicManagementSystem implements ActionListener
@@ -52,6 +55,7 @@ public class ClinicManagementSystem implements ActionListener
       {
 	// Load the Oracle JDBC driver
 	DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+
       }
       catch (SQLException ex)
       {
@@ -103,7 +107,10 @@ public class ClinicManagementSystem implements ActionListener
     	return authenticatedUser;
     }
 
-    /*
+
+
+
+	/*
      * event handler for login window
      */ 
     public void actionPerformed(ActionEvent e) 
