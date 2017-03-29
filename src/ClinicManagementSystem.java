@@ -139,12 +139,13 @@ public class ClinicManagementSystem
     
     private void searchUser(String username){
     	System.out.println("Search for username: "+username+"\n");
+    	String searchString = "%"+username+"%";
     	foundUsers = new ArrayList<String>();
     	PreparedStatement ps; 
     	try{
     		ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
      			   "USERNAME like ?");
-    		ps.setString(1, username);
+    		ps.setString(1, searchString);
         	ResultSet rs;
 
     		rs = ps.executeQuery();
