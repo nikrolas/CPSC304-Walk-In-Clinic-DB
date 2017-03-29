@@ -172,35 +172,37 @@ public class ClinicManagementSystem
 
 	}
 
+    
+    private void searchUser(String username){
+    	System.out.println("Search for username: "+username+"\n");
+    	String searchString = "%"+username+"%";
+    	foundUsers = new ArrayList<String>();
+    	PreparedStatement ps; 
+    	try{
+    		ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
+     			   "USERNAME like ?");
+    		ps.setString(1, searchString);
+        	ResultSet rs;
 
-	private void searchUser(String username){
-		System.out.println("Search for username: "+username+"\n");
-		foundUsers = new ArrayList<String>();
-		PreparedStatement ps;
-		try{
-			ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
-					"USERNAME like ?");
-			ps.setString(1, username);
-			ResultSet rs;
+    		rs = ps.executeQuery();
+    		while(rs.next()){
+    			System.out.println("Next result\n");
+	    		String foundUser = rs.getString("USERNAME");
+	    		foundUsers.add(foundUser);     	
+    		}
+    		
+    		System.out.println("Foundusers: "+ foundUsers);
+        	ps.close();
+  
+    	}
+    	catch(SQLException ex)
+    	{
+    		System.out.println("Message: "+ex.getMessage());
+    	}
+    }
 
-			rs = ps.executeQuery();
-			while(rs.next()){
-				System.out.println("Next result\n");
-				String foundUser = rs.getString("USERNAME");
-				foundUsers.add(foundUser);
-			}
-
-			System.out.println("Foundusers: "+ foundUsers);
-			ps.close();
-
-		}
-		catch(SQLException ex)
-		{
-			System.out.println("Message: "+ex.getMessage());
-		}
-	}
-
-	/*
+    /*
+>>>>>>> UI
      * connects to Oracle database named ug using user supplied username and password
      */
 	private void connect(String username, String password)
