@@ -32,7 +32,7 @@ public class PatientDoctorFrame extends JFrame {
 	
     private DefaultTableModel model;
     
-    Object[] columnNames = {"Results"};
+    Object[] columnNames = {"Last Name", "First Name", "Gender"};
     private JTextField lastNameField;
     private JLabel lastNameLabel;
 
@@ -43,11 +43,11 @@ public class PatientDoctorFrame extends JFrame {
 		for(int i = 0; i < numRows; i++){
 			model.removeRow(0);
 		}
-		model.addRow(new Object[]{"Results"});
+		model.addRow(new Object[]{"Last Name","First Name","Gender"});
 
 		for(Patient patient : patients){
-			String row = patient.getLastName()+", "+patient.getFirstName()+" "+patient.getGender();
-			model.addRow(new Object[]{row});
+			//String row = patient.getLastName()+", "+patient.getFirstName()+" "+patient.getGender();
+			model.addRow(new Object[]{patient.getLastName(), patient.getFirstName(), patient.getGender()});
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
 		resultTable.setModel(model);
@@ -90,9 +90,9 @@ public class PatientDoctorFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 0};
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
 		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
@@ -112,10 +112,6 @@ public class PatientDoctorFrame extends JFrame {
 		gbc_firstNameField.gridy = 0;
 		contentPane.add(firstNameField, gbc_firstNameField);
 		firstNameField.setColumns(10);
-
-		
-		model = new DefaultTableModel(columnNames, 0);
-		model.addRow(new Object[]{"Results"});
 		
 		lastNameLabel = new JLabel("Enter patient last name:");
 		GridBagConstraints gbc_lastNameLabel = new GridBagConstraints();
@@ -140,8 +136,10 @@ public class PatientDoctorFrame extends JFrame {
 		gbc_btnSearch.gridx = 1;
 		gbc_btnSearch.gridy = 2;
 		contentPane.add(btnSearch, gbc_btnSearch);
-		resultTable = new JTable(model);
-
+		
+		model = new DefaultTableModel(columnNames, 0);
+		model.addRow(new Object[]{"Last Name","First Name","Gender"});
+		resultTable = new JTable(model);		
 		GridBagConstraints gbc_resultTable = new GridBagConstraints();
 		gbc_resultTable.insets = new Insets(10, 10, 10, 10);
 		gbc_resultTable.fill = GridBagConstraints.BOTH;
