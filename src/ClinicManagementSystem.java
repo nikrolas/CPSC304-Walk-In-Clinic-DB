@@ -14,7 +14,7 @@ import javax.swing.JFrame;
  * interface for interacting with the branch table 
  */ 
 
-// must have ssh active in terminal:  ssh -l <UNIX id> -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
+// must have ssh active in terminal:  ssh -l l3a9 -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
 public class ClinicManagementSystem
 {
    
@@ -34,6 +34,7 @@ public class ClinicManagementSystem
     private MenuFrame menuFrame;
     
     private UserSearchFrame userSearchFrame;
+    private AppointmentForm appointmentForm;
     
     private ArrayList<String> foundUsers;
     
@@ -92,7 +93,9 @@ public class ClinicManagementSystem
 						showUserSearchWindow();
 						break;
 					case(2):
-						//show medications... 
+						menuFrame.dispose();
+						showAppointmentWindow();
+						//show appointments...
 						break;
 					case(3):
 						//join medication and patients...
@@ -136,6 +139,23 @@ public class ClinicManagementSystem
     	userSearchFrame.setVisible(true);
     	
     }
+
+	private void showAppointmentWindow() {
+		System.out.println("Show appointment window...\n");
+		appointmentForm = new AppointmentForm();
+		appointmentForm.setBackListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Back button presssed\n");
+				appointmentForm.dispose();
+				showMenu();
+			}
+		});
+		appointmentForm.setVisible(true);
+		appointmentForm.setTable(con);
+
+	}
+
     
     private void searchUser(String username){
     	System.out.println("Search for username: "+username+"\n");
