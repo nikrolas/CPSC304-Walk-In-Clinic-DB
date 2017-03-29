@@ -1,1 +1,0 @@
-/*SQL file for creating the Clinic Database*/
