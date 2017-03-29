@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import Database.Patient;
+import Pages.PatientPage;
+
 
 /*
  * This class implements a graphical login window and a simple text
@@ -33,11 +36,13 @@ public class ClinicManagementSystem
 
 	private MenuFrame menuFrame;
 
-	private UserSearchFrame userSearchFrame;
+	private PatientDoctorFrame patientDoctorFrame;
+	private PatientPage patientPage;
 	private AppointmentForm appointmentForm;
 	private PatientReceptionistFrame patientInfo;
 
-	private ArrayList<String> foundUsers;
+	private ArrayList<Patient> foundPatients;
+	
 
 
 
@@ -75,7 +80,6 @@ public class ClinicManagementSystem
 		});
 		loginFrame.pack();
 		loginFrame.setVisible(true);
-		foundUsers = new ArrayList<String>();
 	}
 
 
@@ -91,7 +95,7 @@ public class ClinicManagementSystem
 						break;
 					case(1):
 						menuFrame.dispose();
-						showUserSearchWindow();
+						showPatientSearch();
 						break;
 					case(2):
 						menuFrame.dispose();
@@ -117,28 +121,30 @@ public class ClinicManagementSystem
 		menuFrame.setVisible(true);
 	}
 
-	private void showUserSearchWindow(){
+	private void showPatientSearch(){
 		System.out.println("Show user search window\n");
-		userSearchFrame = new UserSearchFrame();
-		userSearchFrame.setBackListener(new ActionListener() {
+		patientPage = new PatientPage(con);
+		patientDoctorFrame = new PatientDoctorFrame();
+		patientDoctorFrame.setBackListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Back button presssed\n");
-				userSearchFrame.dispose();
+				patientDoctorFrame.dispose();
 				showMenu();
 			}
 		});
-		userSearchFrame.setSearchListener(new ActionListener() {
+		patientDoctorFrame.setSearchListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				searchUser(userSearchFrame.getUsername());
-				userSearchFrame.setResults(foundUsers);
-				userSearchFrame.repaint();
+				//searchUser(patientDoctorFrame.getUsername());
+				foundPatients = patientPage.getPatient(patientDoctorFrame.getFirstName(), patientDoctorFrame.getLastName());
+				patientDoctorFrame.setResults(foundPatients);
+				patientDoctorFrame.repaint();
 			}
 		});
-		userSearchFrame.setVisible(true);
+		patientDoctorFrame.setVisible(true);
 
 	}
 
@@ -172,7 +178,7 @@ public class ClinicManagementSystem
 
 	}
 
-    
+ /*   
     private void searchUser(String username){
     	System.out.println("Search for username: "+username+"\n");
     	String searchString = "%"+username+"%";
@@ -200,9 +206,8 @@ public class ClinicManagementSystem
     		System.out.println("Message: "+ex.getMessage());
     	}
     }
-
+*/
     /*
->>>>>>> UI
      * connects to Oracle database named ug using user supplied username and password
      */
 	private void connect(String username, String password)

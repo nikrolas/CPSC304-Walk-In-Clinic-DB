@@ -13,6 +13,10 @@ import java.util.ArrayList;
  */
 public class PatientPage {
     private Connection con;
+    
+    public PatientPage(Connection con){
+    	this.con = con;
+    }
 
 
     // For doctors + Receptionists all patients
@@ -46,7 +50,7 @@ public class PatientPage {
         PreparedStatement ps;
 
         try{
-            ps = con.prepareStatement("SELECT * FROM PATIENTS p, WHERE " + "p.firstName = ? AND p.lastName = ?");
+            ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.firstName = ? AND p.lastName = ?");
             ps.setString(1,firstName);
             ps.setString(2,lastName);
             rs = ps.executeQuery();
