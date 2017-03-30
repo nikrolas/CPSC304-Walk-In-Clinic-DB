@@ -83,7 +83,7 @@ public class AppointmentPage {
     }
 
     //Delete Appointment from Database by Time, Date and Patient Name
-    // could Swap for Inner Join
+    //  Delete operation:
     public void deleteAppointment(Date appointmentDate, Number appointmentTime, String firstName, String lastName){
         PreparedStatement ps;
         ResultSet rs;

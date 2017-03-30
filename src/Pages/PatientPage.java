@@ -62,10 +62,64 @@ public class PatientPage {
             System.out.println("Message: "+ex.getMessage());
             return null;
         }
-
         return patientList;
 
     }
+
+    //Update Patient and Contact Info
+    // Update operation
+    public void updatePatient(String oldFirstName, String oldLastName, String newFirstName, String newLastName,Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+        ResultSet rs;
+        ArrayList<Patient> patientList = new ArrayList<Patient>();
+        PreparedStatement ps;
+        int patientID;
+
+        try{
+            ps = con.prepareStatement("SELECT * FROM PATIENTS WHERE " + "FirstName= ? AND LastName = ?");
+            ps.setString(1,oldFirstName);
+            ps.setString(2,oldLastName);
+            rs = ps.executeQuery();
+             patientID = rs.getInt("PatientID");
+            ps.close();
+
+            ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ? where PatientID = ?");
+            ps.setString(1,newFirstName);
+            ps.setString(2,newLastName);
+            ps.setInt(3,patientID);
+            rs = ps.executeQuery();
+            ps.close();
+
+            ps = con.prepareStatement("update Contacts set aptHouseNumber = ?, Street = ?, City = ?, PostalCode = ?, Province = ?, PhoneNumber = ?, Notes = ?  where FK_PatientID = ?");
+            ps.setInt(1, (Integer) aptHouseNumber);
+            ps.setString(2,street);
+            ps.setString(3,city);
+            ps.setString(4, postalCode);
+            ps.setString(5,province);
+            ps.setInt(6, (Integer) phoneNumber);
+            ps.setString(7, notes);
+            ps.setInt(8, patientID);
+            rs = ps.executeQuery();
+            ps.close();
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Message: "+ex.getMessage());
+        }
+    }
+
+    //Adds patient + Contact Info to database
+    public void addPatient(){
+
+    }
+
+    //Delete patient + Contact Info to database
+    public void deletePatient(){
+
+    }
+
+
+
+
 
 
 
