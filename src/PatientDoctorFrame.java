@@ -60,7 +60,7 @@ public class PatientDoctorFrame extends JFrame {
 	}
 	
 	public void setSearchListener(ActionListener al){
-		firstNameField.addActionListener(al);
+		lastNameField.addActionListener(al);
 		btnSearch.addActionListener(al);
 	}
 	
@@ -141,9 +141,10 @@ public class PatientDoctorFrame extends JFrame {
 		model.addRow(new Object[]{"Last Name","First Name","Gender"});
 		resultTable = new JTable(model);		
 		GridBagConstraints gbc_resultTable = new GridBagConstraints();
+		gbc_resultTable.gridwidth = 3;
 		gbc_resultTable.insets = new Insets(10, 10, 10, 10);
 		gbc_resultTable.fill = GridBagConstraints.BOTH;
-		gbc_resultTable.gridx = 1;
+		gbc_resultTable.gridx = 0;
 		gbc_resultTable.gridy = 3;
 		contentPane.add(resultTable, gbc_resultTable);
 	}

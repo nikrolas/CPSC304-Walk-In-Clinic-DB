@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 
 import Database.Patient;
 import Pages.PatientPage;
+import Pages.PrescriptionPage;
 
 
 /*
@@ -38,7 +39,12 @@ public class ClinicManagementSystem
 
 	private PatientDoctorFrame patientDoctorFrame;
 	private PatientPage patientPage;
+	
+	private PrescriptionFrame prescriptionFrame;
+	private PrescriptionPage prescriptionPage;
+	
 	private AppointmentForm appointmentForm;
+	
 	private PatientReceptionistFrame patientInfo;
 
 	private ArrayList<Patient> foundPatients;
@@ -107,6 +113,8 @@ public class ClinicManagementSystem
 						showPatientInfo();
 						break;
 					case(4):
+						menuFrame.dispose();
+						showPrescriptionFrame();
 						break;
 					case(5):
 						break;
@@ -120,7 +128,30 @@ public class ClinicManagementSystem
 		menuFrame.pack();
 		menuFrame.setVisible(true);
 	}
+	
+	/*
+	 * Show the prescription page
+	 */
+	private void showPrescriptionFrame(){
+		System.out.println("Show prescription window\n");
+		prescriptionPage = new PrescriptionPage(con);
+		
+		prescriptionFrame = new PrescriptionFrame();
+		prescriptionFrame.setBackListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				prescriptionFrame.dispose();
+				showMenu();
+			}
+		});
+		
+		prescriptionFrame.setVisible(true);
+	}
 
+	/*
+	 * Show the patient search/update page
+	 */
 	private void showPatientSearch(){
 		System.out.println("Show user search window\n");
 		patientPage = new PatientPage(con);
@@ -129,7 +160,6 @@ public class ClinicManagementSystem
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Back button presssed\n");
 				patientDoctorFrame.dispose();
 				showMenu();
 			}
@@ -138,8 +168,16 @@ public class ClinicManagementSystem
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//searchUser(patientDoctorFrame.getUsername());
-				foundPatients = patientPage.getPatient(patientDoctorFrame.getFirstName(), patientDoctorFrame.getLastName());
+				String firstName = patientDoctorFrame.getFirstName();
+				String lastName = patientDoctorFrame.getLastName();
+				if(firstName.equals("") && lastName.equals("")){
+					System.out.println("show all patients\n");
+					foundPatients = patientPage.getPatients();
+				}
+				else{
+					System.out.println("Searching for a patient\n");
+					foundPatients = patientPage.getPatient(patientDoctorFrame.getFirstName(), patientDoctorFrame.getLastName());
+				}
 				patientDoctorFrame.setResults(foundPatients);
 				patientDoctorFrame.repaint();
 			}
@@ -148,6 +186,9 @@ public class ClinicManagementSystem
 
 	}
 
+	/*
+	 * Show the appointment window
+	 */
 	private void showAppointmentWindow() {
 		System.out.println("Show appointment window...\n");
 		appointmentForm = new AppointmentForm();
@@ -178,35 +219,7 @@ public class ClinicManagementSystem
 
 	}
 
- /*   
-    private void searchUser(String username){
-    	System.out.println("Search for username: "+username+"\n");
-    	String searchString = "%"+username+"%";
-    	foundUsers = new ArrayList<String>();
-    	PreparedStatement ps; 
-    	try{
-    		ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
-     			   "USERNAME like ?");
-    		ps.setString(1, searchString);
-        	ResultSet rs;
-
-    		rs = ps.executeQuery();
-    		while(rs.next()){
-    			System.out.println("Next result\n");
-	    		String foundUser = rs.getString("USERNAME");
-	    		foundUsers.add(foundUser);     	
-    		}
-    		
-    		System.out.println("Foundusers: "+ foundUsers);
-        	ps.close();
-  
-    	}
-    	catch(SQLException ex)
-    	{
-    		System.out.println("Message: "+ex.getMessage());
-    	}
-    }
-*/
+ 
     /*
      * connects to Oracle database named ug using user supplied username and password
      */
@@ -223,6 +236,7 @@ public class ClinicManagementSystem
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
+			System.exit(0);
 		}
 	}
 
