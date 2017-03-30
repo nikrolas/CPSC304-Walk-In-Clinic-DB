@@ -18,7 +18,7 @@ public class PrescriptionPage {
 
 
     // For doctors get specific patient's prescriptions;
-    // Inner Join (2)
+    // Inner Join
     public ArrayList<Prescription> getPatientPrescriptions(String firstName, String lastName){
         ResultSet rs;
         PreparedStatement ps;
@@ -70,17 +70,25 @@ public class PrescriptionPage {
 
     //Gets Min or Max Prescriptions for all Patients
     // Nested aggregation with group-by
-    // TODO finish, don't use yet
     public String getMaxorMinMedications(String maxMin){
         ResultSet rs;
         PreparedStatement ps ;
         String medication = null;
 
         try {
-            ps = con.prepareStatement("SELECT FK_MedicationID, Min(Doseage) FROM Prescriptions GROUP BY FK_MedicationID");
+            if (maxMin.equals("min")){
+            ps = con.prepareStatement("SELECT  MIN(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
+            }
+            if(maxMin.equals("max")){
+                ps = con.prepareStatement("SELECT  MAX(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
+            }
+            else{
+                throw new SQLException("Didn't receive Max or Min");
+            }
             rs = ps.executeQuery();
             medication = rs.getString("MedicationName");
             ps.close();
+
         }
         catch(SQLException ex)
         {
