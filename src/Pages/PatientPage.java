@@ -13,6 +13,10 @@ import java.util.ArrayList;
  */
 public class PatientPage {
     private Connection con;
+    
+    public PatientPage(Connection con){
+    	this.con = con;
+    }
 
 
     // For doctors + Receptionists all patients
@@ -21,12 +25,11 @@ public class PatientPage {
         PreparedStatement ps;
         ArrayList<Patient> patientList = new ArrayList<Patient>();
         try{
-            ps = con.prepareStatement("SELECT * FROM PATIENTS p");
+            ps = con.prepareStatement("SELECT * FROM PATIENTS");
             rs = ps.executeQuery();
             while(rs.next()){
                 Patient patient = new Patient(rs.getString("firstName"),rs.getString("lastName"), rs.getString("gender"));
                 patientList.add(patient);
-                ps.close();
             }
             ps.close();
         }
@@ -46,9 +49,19 @@ public class PatientPage {
         PreparedStatement ps;
 
         try{
-            ps = con.prepareStatement("SELECT * FROM PATIENTS p, WHERE " + "p.firstName = ? AND p.lastName = ?");
-            ps.setString(1,firstName);
-            ps.setString(2,lastName);
+        	if( firstName.equals("") ) {
+        		ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.lastName = ?");
+        		ps.setString(1, lastName);
+        	}
+        	else if( lastName.equals("")) {
+        		ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE "+ "p.firstName = ?"); 
+        		ps.setString(1, firstName);
+        	}
+        	else {
+	            ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.firstName = ? AND p.lastName = ?");
+	            ps.setString(1,firstName);
+	            ps.setString(2,lastName);
+        	}
             rs = ps.executeQuery();
 
             while(rs.next()){

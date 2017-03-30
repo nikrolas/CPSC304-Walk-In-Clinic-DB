@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import Database.Patient;
+import Pages.PatientPage;
+import Pages.PrescriptionPage;
+
 
 /*
  * This class implements a graphical login window and a simple text
@@ -33,11 +37,18 @@ public class ClinicManagementSystem
 
 	private MenuFrame menuFrame;
 
-	private UserSearchFrame userSearchFrame;
+	private PatientDoctorFrame patientDoctorFrame;
+	private PatientPage patientPage;
+	
+	private PrescriptionFrame prescriptionFrame;
+	private PrescriptionPage prescriptionPage;
+	
 	private AppointmentForm appointmentForm;
+	
 	private PatientReceptionistFrame patientInfo;
 
-	private ArrayList<String> foundUsers;
+	private ArrayList<Patient> foundPatients;
+	
 
 
 
@@ -75,7 +86,6 @@ public class ClinicManagementSystem
 		});
 		loginFrame.pack();
 		loginFrame.setVisible(true);
-		foundUsers = new ArrayList<String>();
 	}
 
 
@@ -91,7 +101,7 @@ public class ClinicManagementSystem
 						break;
 					case(1):
 						menuFrame.dispose();
-						showUserSearchWindow();
+						showPatientSearch();
 						break;
 					case(2):
 						menuFrame.dispose();
@@ -103,6 +113,8 @@ public class ClinicManagementSystem
 						showPatientInfo();
 						break;
 					case(4):
+						menuFrame.dispose();
+						showPrescriptionFrame();
 						break;
 					case(5):
 						break;
@@ -116,32 +128,67 @@ public class ClinicManagementSystem
 		menuFrame.pack();
 		menuFrame.setVisible(true);
 	}
-
-	private void showUserSearchWindow(){
-		System.out.println("Show user search window\n");
-		userSearchFrame = new UserSearchFrame();
-		userSearchFrame.setBackListener(new ActionListener() {
-
+	
+	/*
+	 * Show the prescription page
+	 */
+	private void showPrescriptionFrame(){
+		System.out.println("Show prescription window\n");
+		prescriptionPage = new PrescriptionPage(con);
+		
+		prescriptionFrame = new PrescriptionFrame();
+		prescriptionFrame.setBackListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Back button presssed\n");
-				userSearchFrame.dispose();
+				prescriptionFrame.dispose();
 				showMenu();
 			}
 		});
-		userSearchFrame.setSearchListener(new ActionListener() {
+		
+		prescriptionFrame.setVisible(true);
+	}
+
+	/*
+	 * Show the patient search/update page
+	 */
+	private void showPatientSearch(){
+		System.out.println("Show user search window\n");
+		patientPage = new PatientPage(con);
+		patientDoctorFrame = new PatientDoctorFrame();
+		patientDoctorFrame.setBackListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				searchUser(userSearchFrame.getUsername());
-				userSearchFrame.setResults(foundUsers);
-				userSearchFrame.repaint();
+				patientDoctorFrame.dispose();
+				showMenu();
 			}
 		});
-		userSearchFrame.setVisible(true);
+		patientDoctorFrame.setSearchListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String firstName = patientDoctorFrame.getFirstName();
+				String lastName = patientDoctorFrame.getLastName();
+				if(firstName.equals("") && lastName.equals("")){
+					System.out.println("show all patients\n");
+					foundPatients = patientPage.getPatients();
+				}
+				else{
+					System.out.println("Searching for a patient\n");
+					foundPatients = patientPage.getPatient(patientDoctorFrame.getFirstName(), patientDoctorFrame.getLastName());
+				}
+				patientDoctorFrame.setResults(foundPatients);
+				patientDoctorFrame.repaint();
+			}
+		});
+		patientDoctorFrame.setVisible(true);
 
 	}
 
+	/*
+	 * Show the appointment window
+	 */
 	private void showAppointmentWindow() {
 		System.out.println("Show appointment window...\n");
 		appointmentForm = new AppointmentForm();
@@ -172,35 +219,8 @@ public class ClinicManagementSystem
 
 	}
 
-
-	private void searchUser(String username){
-		System.out.println("Search for username: "+username+"\n");
-		foundUsers = new ArrayList<String>();
-		PreparedStatement ps;
-		try{
-			ps = con.prepareStatement("SELECT USERNAME FROM USERS WHERE " +
-					"USERNAME like ?");
-			ps.setString(1, username);
-			ResultSet rs;
-
-			rs = ps.executeQuery();
-			while(rs.next()){
-				System.out.println("Next result\n");
-				String foundUser = rs.getString("USERNAME");
-				foundUsers.add(foundUser);
-			}
-
-			System.out.println("Foundusers: "+ foundUsers);
-			ps.close();
-
-		}
-		catch(SQLException ex)
-		{
-			System.out.println("Message: "+ex.getMessage());
-		}
-	}
-
-	/*
+ 
+    /*
      * connects to Oracle database named ug using user supplied username and password
      */
 	private void connect(String username, String password)
@@ -216,6 +236,7 @@ public class ClinicManagementSystem
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
+			System.exit(0);
 		}
 	}
 

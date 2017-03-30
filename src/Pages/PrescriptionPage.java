@@ -17,6 +17,9 @@ public class PrescriptionPage {
     private Connection con;
 
 
+    public PrescriptionPage(Connection con){
+    	this.con = con;
+    }
     // For doctors get specific patient's prescriptions;
     // Inner Join
     public ArrayList<Prescription> getPatientPrescriptions(String firstName, String lastName){
