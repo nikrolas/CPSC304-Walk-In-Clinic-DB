@@ -6,7 +6,6 @@ import Database.PatientContact;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Hayley on 2017-03-28.
@@ -120,7 +119,7 @@ public class PatientPage {
         	int contactID = rs.getInt("ContactID");
 
         	//Fill in any missing contact info
-        	if(aptHouseNumber.equals(-1)){
+        	if(aptHouseNumber.equals(0)){
         		aptHouseNumber = oldContact.getAptHouseNumber();
         	}
         	if(street.equals("")){
@@ -135,7 +134,7 @@ public class PatientPage {
         	if(province.equals("")){
         		province = oldContact.getProvince();
         	}
-        	if(phoneNumber == -1){
+        	if(phoneNumber == 0){
         		//phoneNumber = oldContact.getPhoneNumber();
         	}
         	if(notes.equals("")){
