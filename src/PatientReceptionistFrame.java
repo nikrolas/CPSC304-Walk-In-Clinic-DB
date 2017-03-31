@@ -33,6 +33,8 @@ public class PatientReceptionistFrame extends JFrame {
     private String dropdownSelected;
     private Connection conn;
     private PatientPage patientpage;
+    private Integer apt;
+    private Long number;
     Object[] columnNames = {"First Name", "Last Name", "Gender","Apt/House Number", "Street", "City", "PostalCode","Province","Phone","Insurance","Notes"};
 
     public void setBackListener(ActionListener al){
@@ -42,7 +44,7 @@ public class PatientReceptionistFrame extends JFrame {
     public void setTable(){
         System.out.print("setting up table..");
         PreparedStatement ps;
-        DefaultTableModel model = new DefaultTableModel(0,10);
+        DefaultTableModel model = new DefaultTableModel(0,11);
         model.addRow(columnNames);
 
         try {
@@ -86,9 +88,7 @@ public class PatientReceptionistFrame extends JFrame {
         patientpage = new PatientPage(conn);
 
         //Creating Dropdown
-        optionDropdown.insertItemAt("Add",0);
-        optionDropdown.insertItemAt("Delete",1);
-        optionDropdown.insertItemAt("Modify",2);
+        optionDropdown.insertItemAt("Modify",0);
 
         //Setting up table
         DefaultTableModel model = new DefaultTableModel(0,10);
@@ -117,10 +117,30 @@ public class PatientReceptionistFrame extends JFrame {
                 System.out.print(phoneNumField.getText());
                 System.out.print(insuranceField.getText());
                 System.out.print(notesField.getText());
+<<<<<<< .mine
+                if(aptNumberField.getText().equals("") ) {
+                    apt = 0;
+                }
+                else{
+                    apt = Integer.parseInt(aptNumberField.getText());
+                }
+                if(phoneNumField.getText().equals("")) {
+                    number = (long)0;
+                }
+                else{
+                    number = Long.parseLong(phoneNumField.getText());
+                }
+
+                if(dropdownSelected == "Modify") {
+                    //TODO Modify query SQL
+                    patientpage.updatePatient(Integer.parseInt(patientidField.getText()),fnameField.getText(),lnameField.getText(), genderField.getText(),apt,streetField.getText(),cityField.getText(),postalField.getText(),provinceField.getText(), number,notesField.getText(),insuranceField.getText());
+                    System.out.print("filling up Modify table..");
+=======
                 if(dropdownSelected == "Add") {
                     //TODO Add query SQL
                     patientpage.addPatient(Integer.parseInt(patientidField.getText()),fnameField.getText(),lnameField.getText(), genderField.getText(),insuranceField.getText(),Integer.parseInt(aptNumberField.getText()),streetField.getText(),cityField.getText(),postalField.getText(),provinceField.getText(), Long.parseLong(phoneNumField.getText()),notesField.getText());
                     System.out.print("filling up add table..");
+>>>>>>> .r85
                     PreparedStatement ps;
                     DefaultTableModel model = new DefaultTableModel(0,11);
                     model.addRow(columnNames);
@@ -143,74 +163,6 @@ public class PatientReceptionistFrame extends JFrame {
                             String insurance = rs.getString(10);
                             String notes = rs.getString(11);
                             model.addRow(new Object[]{fname,lname,gender,number,street,city,post,province,phone,insurance,notes});
-                        }
-                        System.out.println("Finished adding tables");
-                        ps.close();
-                    }
-                    catch(SQLException ex)
-                    {
-                        System.out.println("Message: "+ex.getMessage());
-                    }
-                    patientTable.setModel(model);
-                }
-                else if(dropdownSelected == "Delete") {
-                    //TODO Delete query SQL
-                    System.out.print("filling up Delete table..");
-                    PreparedStatement ps;
-                    DefaultTableModel model = new DefaultTableModel(0,10);
-                    model.addRow(columnNames);
-
-                    try {
-                        ps = conn.prepareStatement("select firstname, lastname, apthousenumber, street , city, postalcode, province, phonenumber,insuranceprovidername, notes from contacts c, patients p, insuranceproviders i where p.patientid = c.fk_patientid AND p.fk_insuranceproviderid = i.insuranceproviderid");
-                        ResultSet rs;
-                        rs = ps.executeQuery();
-                        while(rs.next()) {
-                            System.out.println("Next result\n");
-                            String fname = rs.getString(1);
-                            String lname = rs.getString(2);
-                            String number = rs.getString(3);
-                            String street = rs.getString(4);
-                            String city = rs.getString(5);
-                            String post = rs.getString(6);
-                            String province = rs.getString(7);
-                            String phone = rs.getString(8);
-                            String insurance = rs.getString(9);
-                            String notes = rs.getString(10);
-                            model.addRow(new Object[]{fname,lname,number,street,city,post,province,phone,insurance,notes});
-                        }
-                        System.out.println("Finished adding tables");
-                        ps.close();
-                    }
-                    catch(SQLException ex)
-                    {
-                        System.out.println("Message: "+ex.getMessage());
-                    }
-                    patientTable.setModel(model);
-                }
-                else if(dropdownSelected == "Modify") {
-                    //TODO Modify query SQL
-                    System.out.print("filling up Modify table..");
-                    PreparedStatement ps;
-                    DefaultTableModel model = new DefaultTableModel(0,10);
-                    model.addRow(columnNames);
-
-                    try {
-                        ps = conn.prepareStatement("select firstname, lastname, apthousenumber, street , city, postalcode, province, phonenumber,insuranceprovidername, notes from contacts c, patients p, insuranceproviders i where p.patientid = c.fk_patientid AND p.fk_insuranceproviderid = i.insuranceproviderid");
-                        ResultSet rs;
-                        rs = ps.executeQuery();
-                        while(rs.next()) {
-                            System.out.println("Next result\n");
-                            String fname = rs.getString(1);
-                            String lname = rs.getString(2);
-                            String number = rs.getString(3);
-                            String street = rs.getString(4);
-                            String city = rs.getString(5);
-                            String post = rs.getString(6);
-                            String province = rs.getString(7);
-                            String phone = rs.getString(8);
-                            String insurance = rs.getString(9);
-                            String notes = rs.getString(10);
-                            model.addRow(new Object[]{fname,lname,number,street,city,post,province,phone,insurance,notes});
                         }
                         System.out.println("Finished adding tables");
                         ps.close();
