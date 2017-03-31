@@ -16,8 +16,6 @@ public class AppointmentPage {
     private Connection con;
     private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
 
-    
-
     public AppointmentPage(Connection con) {
         this.con = con;
     }

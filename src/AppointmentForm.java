@@ -150,6 +150,7 @@ public class AppointmentForm extends JFrame {
                         System.out.println("Message: "+ex.getMessage());
                     }
                     appointmentTable.setModel(model);                }
+
             }
         });
         options.addActionListener(new ActionListener() {
