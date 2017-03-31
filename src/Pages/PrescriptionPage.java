@@ -83,12 +83,13 @@ public class PrescriptionPage {
             ps = con.prepareStatement("SELECT  MIN(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
             }
             if(maxMin.equals("max")){
-                ps = con.prepareStatement("SELECT  MAX(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
+                ps = con.prepareStatement("SELECT  MedicationName, MAX(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
             }
             else{
                 throw new SQLException("Didn't receive Max or Min");
             }
             rs = ps.executeQuery();
+            rs.next();
             medication = rs.getString("MedicationName");
             ps.close();
 

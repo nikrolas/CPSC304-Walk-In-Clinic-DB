@@ -37,7 +37,6 @@ Select PatientID FROM Patients P Where Not EXISTS ((SELECT AppointmentID from Ap
 
 public class AppointmentPage {
     private Connection con;
-    private int userID;
     private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
 
     
@@ -101,7 +100,7 @@ public class AppointmentPage {
             ps.setInt(4,roomNumber);
             ps.setString(5, reason);
             ps.setInt(6, patientID);
-            ps.setInt(7, 1); //TODO: this should User that is logged on, should be available globally but not right now
+            ps.setInt(7, 1);
             ps.executeUpdate();
             ps.close();
         }

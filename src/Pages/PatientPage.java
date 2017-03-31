@@ -72,31 +72,46 @@ public class PatientPage {
 
     //Update Patient and Contact Info
     // Update operation
-    public void updatePatient(int patientID, String firstName, String lastName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void updatePatient(int patientID, String firstName, String lastName, String gender, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes, String insuranceProviderName){
         PreparedStatement ps;
         ResultSet rs;
+        int insuranceProviderID = 0;
         try{
-        	if(!(firstName.equals("")&& lastName.equals(""))){
-        		if(firstName.equals("")){
-        			ps = con.prepareStatement("update Patients set LastName = ? where PatientID = ?");
-        			ps.setString(1, lastName);
-        			ps.setInt(2, patientID);        			
-        		}
-        		else if(lastName.equals("")){
-        			ps = con.prepareStatement("update Patients set FirstName = ? where PatientID = ?");
-        			ps.setString(1, firstName);
-        			ps.setInt(2, patientID);  
-        		}
-        		else{
-		            ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ? where PatientID = ?");
-		            ps.setString(1,firstName);
-		            ps.setString(2,lastName);
-		            ps.setInt(3,patientID);
-        		}
-	            ps.executeUpdate();
-	            ps.close();
-        	}
-        	
+            if (!insuranceProviderName.equals("")) {
+                ps = con.prepareStatement("SELECT * FROM InsuranceProviders  WHERE " + "InsuranceProviderName = ?");
+                ps.setString(1, insuranceProviderName);
+                rs = ps.executeQuery();
+                rs.next();
+                insuranceProviderID = rs.getInt("InsuranceProviderID");
+            }
+
+            ps = con.prepareStatement("SELECT * FROM Patients WHERE  PatientID = ?");
+            ps.setInt(1, patientID);
+            rs = ps.executeQuery();
+            rs.next();
+            Patient oldPatient = new Patient(rs.getInt("PatientID"), rs.getString("FirstName"), rs.getString("LastName"),rs.getString("Gender"));
+
+            if (insuranceProviderName.equals("")) {
+                insuranceProviderID = rs.getInt("FK_InsuranceProviderID");
+            }
+            if (firstName.equals("")){
+                firstName = oldPatient.getFirstName();
+            }
+            if (lastName.equals("")){
+                lastName = oldPatient.getLastName();
+            }
+            if (gender.equals("")){
+                gender = oldPatient.getGender();
+            }
+
+            ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ?, Gender = ?, FK_InsuranceProviderID = ? where PatientID = ?");
+            ps.setString(1,firstName);
+            ps.setString(2,lastName);
+            ps.setString(3, gender);
+            ps.setInt(4,insuranceProviderID);
+            ps.setInt(5,patientID);
+            ps.executeUpdate();
+
         	//Get the old contact info
 
         	ps = con.prepareStatement("SELECT * FROM CONTACTS WHERE FK_PatientID = ?");
@@ -146,7 +161,7 @@ public class PatientPage {
     }
 
     //Adds patient + Contact Info to database
-    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, int PatientPrescriptionID,  Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
         PreparedStatement ps;
         ResultSet rs;
 
@@ -154,10 +169,11 @@ public class PatientPage {
             ps = con.prepareStatement("SELECT * FROM InsuranceProviders  WHERE " + "InsuranceProviderName = ?");
             ps.setString(1, InsuranceProviderName);
             rs = ps.executeQuery();
+            rs.next();
             int insuranceProviderID = rs.getInt("InsuranceProviderID");
             ps.close();
 
-            String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?,?)";
+            String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?)";
 
             ps = con.prepareStatement(SQL);
             ps.setInt(1, patientID);
@@ -165,8 +181,6 @@ public class PatientPage {
             ps.setString(3, lastName);
             ps.setString(4, gender);
             ps.setInt(5, insuranceProviderID);
-            ps.setInt(6, PatientPrescriptionID);
-
             ps.executeUpdate();
             ps.close();
 
