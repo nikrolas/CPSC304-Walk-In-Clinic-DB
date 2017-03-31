@@ -28,8 +28,6 @@ public class ClinicManagementSystem
 
 	private LoginFrame loginFrame;
 
-
-
 	public enum userTypes {
 		DOCTOR, RECEPTIONIST, UNDEFINED
 	}
@@ -290,9 +288,9 @@ public class ClinicManagementSystem
      */
 	public boolean authenticate(String username, String password){
 		System.out.println("Username: "+ username + ", Password: "+ password);
-		int userID;
 		String userName;
 		ResultSet rs;
+		int userID;
 		PreparedStatement ps;
 		try{
 			ps = con.prepareStatement("SELECT * FROM USERS WHERE " +

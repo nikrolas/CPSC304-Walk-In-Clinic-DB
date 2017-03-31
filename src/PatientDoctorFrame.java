@@ -32,7 +32,7 @@ public class PatientDoctorFrame extends JFrame {
 	
     private DefaultTableModel model;
     
-    Object[] columnNames = {"Last Name", "First Name", "Gender"};
+    Object[] columnNames = {"Patient ID", "Last Name", "First Name", "Gender"};
 
 	
 	public void setResults(ArrayList<Patient> patients){
@@ -41,11 +41,11 @@ public class PatientDoctorFrame extends JFrame {
 		for(int i = 0; i < numRows; i++){
 			model.removeRow(0);
 		}
-		model.addRow(new Object[]{"Last Name","First Name","Gender"});
+		model.addRow(new Object[]{"Patient ID","Last Name","First Name","Gender"});
 
 		for(Patient patient : patients){
 			//String row = patient.getLastName()+", "+patient.getFirstName()+" "+patient.getGender();
-			model.addRow(new Object[]{patient.getLastName(), patient.getFirstName(), patient.getGender()});
+			model.addRow(new Object[]{patient.getPatientID(),patient.getLastName(), patient.getFirstName(), patient.getGender()});
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
 		resultTable.setModel(model);
@@ -107,7 +107,7 @@ public class PatientDoctorFrame extends JFrame {
 		patientIDField.setColumns(10);
 		
 		model = new DefaultTableModel(columnNames, 0);
-		model.addRow(new Object[]{"Last Name","First Name","Gender"});
+		model.addRow(new Object[]{"Patient ID","Last Name","First Name","Gender"});
 		
 		btnSearch = new JButton("Search");
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
