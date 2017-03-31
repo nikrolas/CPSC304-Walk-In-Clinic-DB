@@ -39,6 +39,7 @@ public class ClinicManagementSystem
 	private MenuFrame menuFrame;
 
 	private PatientDoctorFrame patientDoctorFrame;
+	//private PatientUpdateFrame patientUpdateFrame;
 	private PatientPage patientPage;
 	
 	private PrescriptionFrame prescriptionFrame;
@@ -119,6 +120,8 @@ public class ClinicManagementSystem
 						showPrescriptionFrame();
 						break;
 					case(5):
+						menuFrame.dispose();
+						//showPatientUpdate();
 						break;
 					default:
 						break;
@@ -131,6 +134,28 @@ public class ClinicManagementSystem
 		menuFrame.setVisible(true);
 	}
 	
+	/*private void showPatientUpdate(){
+		patientPage = new PatientPage(con);
+		patientUpdateFrame = new PatientUpdateFrame();
+		patientUpdateFrame.setBackListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				patientUpdateFrame.dispose();
+				showMenu();
+			}
+		});
+		
+		patientUpdateFrame.setUpdateListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		patientUpdateFrame.setVisible(true);
+	}*/
 	/*
 	 * Show the prescription page
 	 */
@@ -151,11 +176,16 @@ public class ClinicManagementSystem
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
-				int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
-				foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
-				prescriptionFrame.setResults(foundPrescriptions, totalPrescriptions);
-				prescriptionFrame.repaint();
+				if(!prescriptionFrame.getPatientID().equals("")){
+					int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
+					int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
+					foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
+					prescriptionFrame.setResults(foundPrescriptions, totalPrescriptions);
+					prescriptionFrame.repaint();
+				}
+				else{
+					//nothing
+				}
 			}
 		});
 		prescriptionFrame.setVisible(true);
@@ -165,7 +195,7 @@ public class ClinicManagementSystem
 	 * Show the patient search/update page
 	 */
 	private void showPatientSearch(){
-		System.out.println("Show user search window\n");
+		System.out.println("Show patient window\n");
 		patientPage = new PatientPage(con);
 		patientDoctorFrame = new PatientDoctorFrame();
 		patientDoctorFrame.setBackListener(new ActionListener() {
@@ -195,6 +225,7 @@ public class ClinicManagementSystem
 				patientDoctorFrame.repaint();
 			}
 		});
+		
 		patientDoctorFrame.setVisible(true);
 
 	}

@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Contact;
 import Database.Patient;
 
 import java.sql.Connection;
@@ -72,19 +73,60 @@ public class PatientPage {
     //Update Patient and Contact Info
     // Update operation
     public void updatePatient(int patientID, String firstName, String lastName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
-        ResultSet rs;
-        ArrayList<Patient> patientList = new ArrayList<Patient>();
         PreparedStatement ps;
-
+        ResultSet rs;
         try{
+        	if(!(firstName.equals("")&& lastName.equals(""))){
+        		if(firstName.equals("")){
+        			ps = con.prepareStatement("update Patients set LastName = ? where PatientID = ?");
+        			ps.setString(1, lastName);
+        			ps.setInt(2, patientID);        			
+        		}
+        		else if(lastName.equals("")){
+        			ps = con.prepareStatement("update Patients set FirstName = ? where PatientID = ?");
+        			ps.setString(1, firstName);
+        			ps.setInt(2, patientID);  
+        		}
+        		else{
+		            ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ? where PatientID = ?");
+		            ps.setString(1,firstName);
+		            ps.setString(2,lastName);
+		            ps.setInt(3,patientID);
+        		}
+	            ps.executeUpdate();
+	            ps.close();
+        	}
+        	
+        	//Get the old contact info
 
-            ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ? where PatientID = ?");
-            ps.setString(1,firstName);
-            ps.setString(2,lastName);
-            ps.setInt(3,patientID);
-            ps.executeUpdate();
-            ps.close();
+        	ps = con.prepareStatement("SELECT * FROM CONTACTS WHERE FK_PatientID = ?");
+        	ps.setInt(1, patientID);
+        	rs = ps.executeQuery();
+        	rs.next();
+        	Contact oldContact = new Contact(rs.getInt("aptHouseNumber"), rs.getString("Street"),rs.getString("City"), rs.getString("postalCode"), rs.getString("province"), rs.getInt("PhoneNumber"), rs.getString("Notes"));
 
+        	//Fill in any missing contact info
+        	if(aptHouseNumber == null){
+        		aptHouseNumber = oldContact.getAptHouseNumber();
+        	}
+        	if(street.equals("")){
+        		street = oldContact.getStreet();
+        	}
+        	if(city.equals("")){
+        		city = oldContact.getCity();
+        	}
+        	if(postalCode.equals("")){
+        		postalCode = oldContact.getPostalCode();
+        	}
+        	if(province.equals("")){
+        		province = oldContact.getProvince();
+        	}
+        	if(phoneNumber == null){
+        		phoneNumber = oldContact.getPhoneNumber();
+        	}
+        	if(notes.equals("")){
+        		notes = oldContact.getNotes();
+        	}
             ps = con.prepareStatement("update Contacts set aptHouseNumber = ?, Street = ?, City = ?, PostalCode = ?, Province = ?, PhoneNumber = ?, Notes = ?  where FK_PatientID = ?");
             ps.setInt(1, (Integer) aptHouseNumber);
             ps.setString(2,street);

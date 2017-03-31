@@ -3,6 +3,8 @@ package Pages;
 import Database.Appointment;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -36,6 +38,9 @@ Select PatientID FROM Patients P Where Not EXISTS ((SELECT AppointmentID from Ap
 public class AppointmentPage {
     private Connection con;
     private int userID;
+    private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+
+    
 
     // Get Appointments by Time, Date and Patient Name
     public ArrayList<Appointment> getAppointmentsbyDoctor(Date appointmentDate, Number appointmentTime, int patientID){
@@ -69,18 +74,29 @@ public class AppointmentPage {
     }
 
     //Insert Appointment into Database by Time, Date and Patient Name
-    public void addAppointment(Date appointmentDate, Number appointmentTime,int roomNumber, String reason, int patientID){
+    public void addAppointment(String appointmentDate, Number appointmentTime,int roomNumber, String reason, int patientID){
         PreparedStatement ps;
         ResultSet rs;
 
         try {
             Random random = new Random();
             int appointmentID = random.nextInt();
+            java.util.Date date;
+            java.sql.Date sqlDate;
+            try {
+                date=df.parse(appointmentDate);
+                sqlDate = new java.sql.Date(date.getTime());
+                
+              }
+              catch (Exception e) {     
+                System.out.println(e.toString() + ", " + appointmentDate);
+                return;
+              }
             String SQL = "INSERT INTO Appointments VALUES (?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(SQL);
             ps.setInt(1, appointmentID);
-            ps.setDate(2, (java.sql.Date) appointmentDate);
+            ps.setDate(2, sqlDate);
             ps.setInt(3, (Integer) appointmentTime);
             ps.setInt(4,roomNumber);
             ps.setString(5, reason);
@@ -97,15 +113,26 @@ public class AppointmentPage {
 
     //Delete Appointment from Database by Time, Date and Patient Name
     //  Delete operation:
-    public void deleteAppointment(Date appointmentDate, Number appointmentTime, int patientID){
+    public void deleteAppointment(String appointmentDate, Number appointmentTime, int patientID){
         PreparedStatement ps;
         ResultSet rs;
 
         try {
+        	 java.util.Date date;
+             java.sql.Date sqlDate;
+             try {
+                 date=df.parse(appointmentDate);
+                 sqlDate = new java.sql.Date(date.getTime());
+                 
+               }
+               catch (Exception e) {     
+                 System.out.println(e.toString() + ", " + appointmentDate);
+                 return;
+               }
             String sql = "DELETE FROM Appointments  WHERE " + "AppointmentDate = ? AND AppointmentTime = ? AND FK_PatientID = ? ";
             ps = con.prepareStatement(sql);
 
-            ps.setDate(1, (java.sql.Date) appointmentDate);
+            ps.setDate(1, sqlDate);
             ps.setInt(2,(Integer) appointmentTime );
             ps.setInt(3,patientID);
             ps.executeUpdate();

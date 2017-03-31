@@ -62,6 +62,7 @@ public class PatientDoctorFrame extends JFrame {
 		btnSearch.addActionListener(al);
 	}
 	
+	
 	public String getPatientID(){
 		return patientIDField.getText();
 	}
@@ -123,5 +124,6 @@ public class PatientDoctorFrame extends JFrame {
 		gbc_resultTable.gridy = 3;
 		contentPane.add(resultTable, gbc_resultTable);
 	}
+
 
 }
