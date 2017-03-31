@@ -3,6 +3,8 @@ package Pages;
 import Database.Appointment;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -12,6 +14,9 @@ import java.util.Random;
  */
 public class AppointmentPage {
     private Connection con;
+    private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+
+    
 
     // Get Appointments by Time, Date and Patient Name
     public ArrayList<Appointment> getAppointmentsbyDoctor(Date appointmentDate, Number appointmentTime, int patientID){
@@ -45,18 +50,26 @@ public class AppointmentPage {
     }
 
     //Insert Appointment into Database by Time, Date and Patient Name
-    public void addAppointment(Date appointmentDate, Number appointmentTime,int roomNumber, String reason, int patientID){
+    public void addAppointment(String appointmentDate, Number appointmentTime,int roomNumber, String reason, int patientID){
         PreparedStatement ps;
         ResultSet rs;
 
         try {
             Random random = new Random();
             int appointmentID = random.nextInt();
+            Date date;
+            try {
+                date=df.parse(appointmentDate);
+              }
+              catch (Exception e) {     
+                System.out.println(e.toString() + ", " + appointmentDate);
+                return;
+              }
             String SQL = "INSERT INTO Appointments VALUES (?,?,?,?,?,?,?)";
 
             ps = con.prepareStatement(SQL);
             ps.setInt(1, appointmentID);
-            ps.setDate(2, (java.sql.Date) appointmentDate);
+            ps.setDate(2, (java.sql.Date) date);
             ps.setInt(3, (Integer) appointmentTime);
             ps.setInt(4,roomNumber);
             ps.setString(5, reason);
