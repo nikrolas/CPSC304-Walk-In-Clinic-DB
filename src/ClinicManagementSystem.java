@@ -246,7 +246,7 @@ public class ClinicManagementSystem
     }
 	private void showPatientInfo() {
 		System.out.println("Show patient window...\n");
-		patientInfo = new PatientReceptionistFrame();
+		patientInfo = new PatientReceptionistFrame(con);
 		patientInfo.setBackListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -255,7 +255,7 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
-		patientInfo.setConnection(con);
+		patientInfo.setTable();
 		patientInfo.setVisible(true);
 
 	}

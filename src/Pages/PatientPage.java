@@ -146,7 +146,7 @@ public class PatientPage {
     }
 
     //Adds patient + Contact Info to database
-    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, int PatientPrescriptionID,  Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
         PreparedStatement ps;
         ResultSet rs;
 
@@ -154,10 +154,11 @@ public class PatientPage {
             ps = con.prepareStatement("SELECT * FROM InsuranceProviders  WHERE " + "InsuranceProviderName = ?");
             ps.setString(1, InsuranceProviderName);
             rs = ps.executeQuery();
+            rs.next();
             int insuranceProviderID = rs.getInt("InsuranceProviderID");
             ps.close();
 
-            String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?,?)";
+            String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?)";
 
             ps = con.prepareStatement(SQL);
             ps.setInt(1, patientID);
@@ -165,7 +166,6 @@ public class PatientPage {
             ps.setString(3, lastName);
             ps.setString(4, gender);
             ps.setInt(5, insuranceProviderID);
-            ps.setInt(6, PatientPrescriptionID);
 
             ps.executeUpdate();
             ps.close();
