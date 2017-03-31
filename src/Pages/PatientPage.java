@@ -2,11 +2,9 @@ package Pages;
 
 import Database.Contact;
 import Database.Patient;
+import Database.PatientContact;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -162,7 +160,7 @@ public class PatientPage {
     }
 
     //Adds patient + Contact Info to database
-    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, Number aptHouseNumber,String street, String city, String postalCode, String province, Long phoneNumber, String notes){
         PreparedStatement ps;
         ResultSet rs;
 
@@ -216,9 +214,8 @@ public class PatientPage {
         ResultSet rs;
 
         try {
-            String sql = "DELETE FROM Patients  WHERE " + "PatientID = ?";
+            String sql = "DELETE FROM Patients WHERE " + "PatientID = ?";
             ps = con.prepareStatement(sql);
-
             ps.setInt(1,  patientID);
             ps.executeUpdate();
             ps.close();
@@ -234,6 +231,41 @@ public class PatientPage {
         catch(SQLException ex){
             System.out.println("Message: "+ex.getMessage());
         }
+    }
+
+    /* Select PatientID FROM Patients P Where not EXISTS (SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) Minus (select PatientID FROM Patients P  Minus (SELECT FK_PatientID from contacts))
+
+      */
+    public ArrayList<PatientContact>  contactNewPatients(){
+        ResultSet rs;
+        PreparedStatement ps;
+        ArrayList<Integer> patientIds = new ArrayList<Integer>();
+        ArrayList<PatientContact> patientContactList = new ArrayList<PatientContact>();
+        try{
+            ps = con.prepareStatement("Select PatientID FROM Patients P Where not EXISTS (SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) EXCEPT (select PatientID FROM Patients P  EXCEPT (SELECT FK_PatientID from Contacts))");
+            rs = ps.executeQuery();
+            while(rs.next()){
+               int patientId = rs.getInt("PatientID");
+                patientIds.add(patientId);
+            }
+            ps.close();
+
+            for (Integer patientId : patientIds) {
+                ps = con.prepareStatement("SELECT * FROM Patients, Contacts WHERE PatientID = ? AND FK_PatientID = PatientID");
+                ps.setInt(1, patientId);
+                rs = ps.executeQuery();
+                rs.next();
+                PatientContact patientContact = new PatientContact(rs.getInt("PatientID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),rs.getLong("PhoneNumber"));
+                patientContactList.add(patientContact);
+            }
+            ps.close();
+        }
+        catch(SQLException ex) {
+            System.out.println("Message: "+ex.getMessage());
+            return null;
+        }
+        return patientContactList;
+
     }
 
 

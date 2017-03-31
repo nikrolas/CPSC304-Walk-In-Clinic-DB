@@ -9,7 +9,7 @@ public class Contact {
     private String city;
     private String postalCode;
     private String province;
-    private Number phoneNumber;
+    private Long phoneNumber;
     private String notes;
 
     public Contact( Number aptHouseNumber, String street, String city, String postalCode, String province, Long phoneNumber, String notes){
@@ -62,7 +62,7 @@ public class Contact {
         this.notes = notes;
     }
 
-    public void setPhoneNumber(Number phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
