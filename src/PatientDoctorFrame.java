@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Database.Patient;
+import Database.PatientContact;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ public class PatientDoctorFrame extends JFrame {
 		
 	}
 	
-	public void listPatientsWithoutAppointments(ArrayList<Patient> patients){
+	public void listPatientsWithoutAppointments(ArrayList<PatientContact> patients){
 		DefaultTableModel model = (DefaultTableModel) divisionTable.getModel();
 		int numRows = model.getRowCount();
 		for(int i = 0; i < numRows; i++){
@@ -63,9 +64,9 @@ public class PatientDoctorFrame extends JFrame {
 		}
 		model.addRow(new Object[]{"Patient ID","Last Name","First Name","Gender"});
 
-		for(Patient patient : patients){
+		for(PatientContact patient : patients){
 			//String row = patient.getLastName()+", "+patient.getFirstName()+" "+patient.getGender();
-			model.addRow(new Object[]{patient.getPatientID(),patient.getLastName(), patient.getFirstName(), patient.getGender(), });
+			model.addRow(new Object[]{patient.getPatientID(),patient.getLastName(), patient.getFirstName(), patient.getGender(), patient.getPhoneNumber()});
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
 		divisionTable.setModel(model);
