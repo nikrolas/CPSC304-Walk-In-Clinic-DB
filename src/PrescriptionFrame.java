@@ -25,10 +25,8 @@ public class PrescriptionFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JMenuItem mntmBack;
-	private JLabel firstNameLabel;
-	private JLabel lastNameLabel;
-	private JTextField firstNameField;
-	private JTextField lastNameField;
+	private JLabel patientIDLabel;
+	private JTextField patientIDField;
 	private JTable table;
 	private JLabel lblTotalPrescriptions;
 	
@@ -53,7 +51,6 @@ public class PrescriptionFrame extends JFrame {
 		model.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});
 
 		for(Prescription prescription : prescriptions){
-			//String row = patient.getLastName()+", "+patient.getFirstName()+" "+patient.getGender();
 			model.addRow(new Object[]{prescription.getDoseage(), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
@@ -67,16 +64,14 @@ public class PrescriptionFrame extends JFrame {
 	
 	public void setSearchListener(ActionListener al){
 		btnSearch.addActionListener(al);
-		lastNameField.addActionListener(al);
+		patientIDField.addActionListener(al);
 	}
 	
-	public String getFirstName(){
-		return firstNameField.getText();
+	public String getPatientID(){
+		return patientIDField.getText();
 	}
 	
-	public String getLastName(){
-		return lastNameField.getText();
-	}
+	
 	
 	
 	/**
@@ -101,39 +96,22 @@ public class PrescriptionFrame extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		firstNameLabel = new JLabel("Enter First Name:");
-		GridBagConstraints gbc_firstNameLabel = new GridBagConstraints();
-		gbc_firstNameLabel.anchor = GridBagConstraints.EAST;
-		gbc_firstNameLabel.insets = new Insets(10, 10, 10, 10);
-		gbc_firstNameLabel.gridx = 0;
-		gbc_firstNameLabel.gridy = 0;
-		contentPane.add(firstNameLabel, gbc_firstNameLabel);
+		patientIDLabel = new JLabel("Enter Patient ID:");
+		GridBagConstraints gbc_patientIDLabel = new GridBagConstraints();
+		gbc_patientIDLabel.anchor = GridBagConstraints.EAST;
+		gbc_patientIDLabel.insets = new Insets(10, 10, 10, 10);
+		gbc_patientIDLabel.gridx = 0;
+		gbc_patientIDLabel.gridy = 0;
+		contentPane.add(patientIDLabel, gbc_patientIDLabel);
 		
-		firstNameField = new JTextField();
-		GridBagConstraints gbc_firstNameField = new GridBagConstraints();
-		gbc_firstNameField.insets = new Insets(10, 10, 10, 10);
-		gbc_firstNameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_firstNameField.gridx = 1;
-		gbc_firstNameField.gridy = 0;
-		contentPane.add(firstNameField, gbc_firstNameField);
-		firstNameField.setColumns(10);
-		
-		lastNameLabel = new JLabel("Enter Last Name:");
-		GridBagConstraints gbc_lastNameLabel = new GridBagConstraints();
-		gbc_lastNameLabel.anchor = GridBagConstraints.EAST;
-		gbc_lastNameLabel.insets = new Insets(10, 10, 10, 10);
-		gbc_lastNameLabel.gridx = 0;
-		gbc_lastNameLabel.gridy = 1;
-		contentPane.add(lastNameLabel, gbc_lastNameLabel);
-		
-		lastNameField = new JTextField();
-		GridBagConstraints gbc_lastNameField = new GridBagConstraints();
-		gbc_lastNameField.insets = new Insets(10, 10, 10, 10);
-		gbc_lastNameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lastNameField.gridx = 1;
-		gbc_lastNameField.gridy = 1;
-		contentPane.add(lastNameField, gbc_lastNameField);
-		lastNameField.setColumns(10);
+		patientIDField = new JTextField();
+		GridBagConstraints gbc_patientIDField = new GridBagConstraints();
+		gbc_patientIDField.insets = new Insets(10, 10, 10, 10);
+		gbc_patientIDField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_patientIDField.gridx = 1;
+		gbc_patientIDField.gridy = 0;
+		contentPane.add(patientIDField, gbc_patientIDField);
+		patientIDField.setColumns(10);
 		
 		model = new DefaultTableModel(columnNames, 0);
 		model.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});

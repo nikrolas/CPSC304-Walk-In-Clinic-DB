@@ -151,9 +151,8 @@ public class ClinicManagementSystem
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String firstName = prescriptionFrame.getFirstName();
-				String lastName = prescriptionFrame.getLastName();
-				//foundPrescriptions = prescriptionPage.getPatientPrescriptions(firstName, lastName);
+				int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
+				foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
 				prescriptionFrame.setResults(foundPrescriptions);
 				prescriptionFrame.repaint();
 			}
