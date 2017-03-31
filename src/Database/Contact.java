@@ -12,7 +12,7 @@ public class Contact {
     private Number phoneNumber;
     private String notes;
 
-    public Contact( Number aptHouseNumber, String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public Contact( Number aptHouseNumber, String street, String city, String postalCode, String province, Long phoneNumber, String notes){
         this.aptHouseNumber = aptHouseNumber;
         this.street = street;
         this.city = city;
@@ -30,7 +30,7 @@ public class Contact {
         return aptHouseNumber;
     }
 
-    public Number getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
