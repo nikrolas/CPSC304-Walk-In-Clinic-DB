@@ -8,13 +8,15 @@ public class Patient{
     private String firstName;
     private String lastName;
     private String gender;
+    private int patientID;
 
 
 
-    public Patient( String firstName, String lastName, String gender){
+    public Patient(int patientID, String firstName, String lastName, String gender){
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
+        this.patientID = patientID;
 
     }
 
@@ -29,6 +31,14 @@ public class Patient{
 
     public String getLastName() {
         return lastName;
+    }
+    
+    public int getPatientID(){
+    	return patientID;
+    }
+    
+    public void setPatientID(int patientID){
+    	this.patientID = patientID;
     }
 
     public void setGender(String gender) {

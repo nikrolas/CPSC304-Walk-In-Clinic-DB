@@ -24,7 +24,7 @@ import javax.swing.JButton;
 public class PatientDoctorFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField firstNameField;
+	private JTextField patientIDField;
 	private JTable resultTable;
 	private JMenuBar menuBar;
 	private JMenuItem mntmBack;
@@ -33,8 +33,6 @@ public class PatientDoctorFrame extends JFrame {
     private DefaultTableModel model;
     
     Object[] columnNames = {"Last Name", "First Name", "Gender"};
-    private JTextField lastNameField;
-    private JLabel lastNameLabel;
 
 	
 	public void setResults(ArrayList<Patient> patients){
@@ -60,18 +58,12 @@ public class PatientDoctorFrame extends JFrame {
 	}
 	
 	public void setSearchListener(ActionListener al){
-		lastNameField.addActionListener(al);
+		patientIDField.addActionListener(al);
 		btnSearch.addActionListener(al);
 	}
 	
-	public String getFirstName(){
-		System.out.println("firstname: "+firstNameField.getText());
-		return firstNameField.getText();
-	}
-	
-	public String getLastName(){
-		System.out.println("lastname: "+lastNameField.getText());
-		return lastNameField.getText();
+	public String getPatientID(){
+		return patientIDField.getText();
 	}
 	/**
 	 * Create the frame.
@@ -104,41 +96,24 @@ public class PatientDoctorFrame extends JFrame {
 		gbc_firstNameLabel.gridy = 0;
 		contentPane.add(firstNameLabel, gbc_firstNameLabel);
 		
-		firstNameField = new JTextField();
-		GridBagConstraints gbc_firstNameField = new GridBagConstraints();
-		gbc_firstNameField.insets = new Insets(10, 10, 10, 10);
-		gbc_firstNameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_firstNameField.gridx = 1;
-		gbc_firstNameField.gridy = 0;
-		contentPane.add(firstNameField, gbc_firstNameField);
-		firstNameField.setColumns(10);
+		patientIDField = new JTextField();
+		GridBagConstraints gbc_patientIDField = new GridBagConstraints();
+		gbc_patientIDField.insets = new Insets(10, 10, 10, 10);
+		gbc_patientIDField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_patientIDField.gridx = 1;
+		gbc_patientIDField.gridy = 0;
+		contentPane.add(patientIDField, gbc_patientIDField);
+		patientIDField.setColumns(10);
 		
-		lastNameLabel = new JLabel("Enter patient last name:");
-		GridBagConstraints gbc_lastNameLabel = new GridBagConstraints();
-		gbc_lastNameLabel.insets = new Insets(10, 10, 10, 10);
-		gbc_lastNameLabel.anchor = GridBagConstraints.EAST;
-		gbc_lastNameLabel.gridx = 0;
-		gbc_lastNameLabel.gridy = 1;
-		contentPane.add(lastNameLabel, gbc_lastNameLabel);
-		
-		lastNameField = new JTextField();
-		GridBagConstraints gbc_lastNameField = new GridBagConstraints();
-		gbc_lastNameField.insets = new Insets(10, 10, 10, 10);
-		gbc_lastNameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lastNameField.gridx = 1;
-		gbc_lastNameField.gridy = 1;
-		contentPane.add(lastNameField, gbc_lastNameField);
-		lastNameField.setColumns(10);
+		model = new DefaultTableModel(columnNames, 0);
+		model.addRow(new Object[]{"Last Name","First Name","Gender"});
 		
 		btnSearch = new JButton("Search");
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.insets = new Insets(0, 10, 5, 10);
 		gbc_btnSearch.gridx = 1;
-		gbc_btnSearch.gridy = 2;
+		gbc_btnSearch.gridy = 1;
 		contentPane.add(btnSearch, gbc_btnSearch);
-		
-		model = new DefaultTableModel(columnNames, 0);
-		model.addRow(new Object[]{"Last Name","First Name","Gender"});
 		resultTable = new JTable(model);		
 		GridBagConstraints gbc_resultTable = new GridBagConstraints();
 		gbc_resultTable.gridwidth = 3;
