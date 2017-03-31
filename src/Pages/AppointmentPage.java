@@ -57,9 +57,12 @@ public class AppointmentPage {
         try {
             Random random = new Random();
             int appointmentID = random.nextInt();
-            Date date;
+            java.util.Date date;
+            java.sql.Date sqlDate;
             try {
                 date=df.parse(appointmentDate);
+                sqlDate = new java.sql.Date(date.getTime());
+                
               }
               catch (Exception e) {     
                 System.out.println(e.toString() + ", " + appointmentDate);
@@ -69,7 +72,7 @@ public class AppointmentPage {
 
             ps = con.prepareStatement(SQL);
             ps.setInt(1, appointmentID);
-            ps.setDate(2, (java.sql.Date) date);
+            ps.setDate(2, sqlDate);
             ps.setInt(3, (Integer) appointmentTime);
             ps.setInt(4,roomNumber);
             ps.setString(5, reason);
