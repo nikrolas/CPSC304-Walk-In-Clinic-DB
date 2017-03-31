@@ -39,7 +39,7 @@ public class ClinicManagementSystem
 	private MenuFrame menuFrame;
 
 	private PatientDoctorFrame patientDoctorFrame;
-	private PatientUpdateFrame patientUpdateFrame;
+	//private PatientUpdateFrame patientUpdateFrame;
 	private PatientPage patientPage;
 	
 	private PrescriptionFrame prescriptionFrame;
@@ -121,7 +121,7 @@ public class ClinicManagementSystem
 						break;
 					case(5):
 						menuFrame.dispose();
-						showPatientUpdate();
+						//showPatientUpdate();
 						break;
 					default:
 						break;
@@ -134,7 +134,7 @@ public class ClinicManagementSystem
 		menuFrame.setVisible(true);
 	}
 	
-	private void showPatientUpdate(){
+	/*private void showPatientUpdate(){
 		patientPage = new PatientPage(con);
 		patientUpdateFrame = new PatientUpdateFrame();
 		patientUpdateFrame.setBackListener(new ActionListener() {
@@ -155,7 +155,7 @@ public class ClinicManagementSystem
 			}
 		});
 		patientUpdateFrame.setVisible(true);
-	}
+	}*/
 	/*
 	 * Show the prescription page
 	 */
