@@ -12,6 +12,29 @@ import java.util.Random;
 /**
  * Created by Hayley on 2017-03-28.
  */
+/*
+SELECT cname
+        FROM Customer C
+        WHERE NOT EXISTS
+        ((SELECT I.iid
+        FROM Item I)
+        EXCEPT
+        (SELECT R.iid
+        FROM Order R
+        WHERE R.cid=C.cid))
+
+Select PatientID FROM Patients P WHERE  EXISTS (SELECT A.AppointmentID FROM Appointments A) EXCEPT
+SELECT PhoneNumber FROM Contact  WHERE PatientID = FK_PatientID;
+
+Select PatientID FROM Patients P Where EXISTS ((SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) Minus (SELECT FK_PatientID FROM Contacts));
+
+Select PatientID FROM Patients P Where EXISTS ((SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) Minus (SELECT c.PhoneNumber FROM Contacts c WHERE PatientID = c.FK_PatientID AND ))
+
+Select PatientID FROM Patients P Where Not EXISTS ((SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) Minus (SELECT c.PhoneNumber FROM Contacts c WHERE PatientID = c.FK_PatientID)) // Add a not exists
+
+        */
+
+
 public class AppointmentPage {
     private Connection con;
     private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
@@ -79,7 +102,7 @@ public class AppointmentPage {
             ps.setInt(4,roomNumber);
             ps.setString(5, reason);
             ps.setInt(6, patientID);
-            ps.setInt(7, 1); //TODO: this should User that is logged on, should be available globally but not right now
+            ps.setInt(7, 1);
             ps.executeUpdate();
             ps.close();
         }
