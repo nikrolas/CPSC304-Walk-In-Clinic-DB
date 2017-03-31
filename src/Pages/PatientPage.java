@@ -121,7 +121,7 @@ public class PatientPage {
         	Contact oldContact = new Contact(rs.getInt("aptHouseNumber"), rs.getString("Street"),rs.getString("City"), rs.getString("postalCode"), rs.getString("province"), rs.getInt("PhoneNumber"), rs.getString("Notes"));
 
         	//Fill in any missing contact info
-        	if(aptHouseNumber == null){
+        	if(aptHouseNumber.equals(-1)){
         		aptHouseNumber = oldContact.getAptHouseNumber();
         	}
         	if(street.equals("")){
@@ -136,7 +136,7 @@ public class PatientPage {
         	if(province.equals("")){
         		province = oldContact.getProvince();
         	}
-        	if(phoneNumber == null){
+        	if(phoneNumber.equals(-1)){
         		phoneNumber = oldContact.getPhoneNumber();
         	}
         	if(notes.equals("")){
