@@ -29,7 +29,7 @@ public class PrescriptionPage {
         ArrayList<Prescription> prescriptonList = new ArrayList<Prescription>();
 
         try {
-            ps = con.prepareStatement("SELECT * FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "PatientID = ?");
+            ps = con.prepareStatement("SELECT * FROM PATIENTS pat INNER JOIN  Patients_Prescriptions patpre ON patpre.FK_PatientID = pat.PatientID INNER JOIN Prescriptions pre ON pre.PrescriptionID = patpre.FK_PrescriptionID INNER JOIN Medications med ON med.MedicationID = pre.FK_MedicationID Where PatientID =?");
             ps.setInt(1, patientID);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -56,7 +56,7 @@ public class PrescriptionPage {
         PreparedStatement ps;
         int totalPrescriptions = 0;
         try {
-            ps = con.prepareStatement("SELECT COUNT (*) as Total FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "PatientID = ? ");
+            ps = con.prepareStatement("SELECT COUNT (*) as Total FROM PATIENTS pat INNER JOIN  Patients_Prescriptions patpre ON patpre.FK_PatientID = pat.PatientID INNER JOIN Prescriptions pre ON pre.PrescriptionID = patpre.FK_PrescriptionID INNER JOIN Medications med ON med.MedicationID = pre.FK_MedicationID Where PatientID =?");
             ps.setInt(1, patientID);
             rs = ps.executeQuery();
             totalPrescriptions = rs.getInt("Total");
