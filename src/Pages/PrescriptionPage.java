@@ -33,12 +33,13 @@ public class PrescriptionPage {
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             rs = ps.executeQuery();
-
             while (rs.next()) {
+            	System.out.println("Next?\n");
                 Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
                 prescriptonList.add(prescription);
                 patientID = rs.getInt("PatientID");
             }
+            System.out.println("Result set depleted\n");
             ps.close();
             getTotalPrescriptions(patientID);
         }
