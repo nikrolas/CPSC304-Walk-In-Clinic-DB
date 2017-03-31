@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * interface for interacting with the branch table
  */
 
-// must have ssh active in terminal:  ssh -l l3a9 -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
+// must have ssh active in terminal:  ssh -l v9w8 -L localhost:1522:dbhost.ugrad.cs.ubc.ca:1522 remote.ugrad.cs.ubc.ca
 public class ClinicManagementSystem
 {
 

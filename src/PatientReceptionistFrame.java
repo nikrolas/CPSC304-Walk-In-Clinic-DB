@@ -117,7 +117,7 @@ public class PatientReceptionistFrame extends JFrame {
                 System.out.print(phoneNumField.getText());
                 System.out.print(insuranceField.getText());
                 System.out.print(notesField.getText());
-<<<<<<< .mine
+
                 if(aptNumberField.getText().equals("") ) {
                     apt = 0;
                 }
@@ -135,12 +135,9 @@ public class PatientReceptionistFrame extends JFrame {
                     //TODO Modify query SQL
                     patientpage.updatePatient(Integer.parseInt(patientidField.getText()),fnameField.getText(),lnameField.getText(), genderField.getText(),apt,streetField.getText(),cityField.getText(),postalField.getText(),provinceField.getText(), number,notesField.getText(),insuranceField.getText());
                     System.out.print("filling up Modify table..");
-=======
-                if(dropdownSelected == "Add") {
-                    //TODO Add query SQL
-                    patientpage.addPatient(Integer.parseInt(patientidField.getText()),fnameField.getText(),lnameField.getText(), genderField.getText(),insuranceField.getText(),Integer.parseInt(aptNumberField.getText()),streetField.getText(),cityField.getText(),postalField.getText(),provinceField.getText(), Long.parseLong(phoneNumField.getText()),notesField.getText());
-                    System.out.print("filling up add table..");
->>>>>>> .r85
+
+
+
                     PreparedStatement ps;
                     DefaultTableModel model = new DefaultTableModel(0,11);
                     model.addRow(columnNames);
