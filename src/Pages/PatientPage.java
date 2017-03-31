@@ -242,7 +242,7 @@ public class PatientPage {
         ArrayList<Integer> patientIds = new ArrayList<Integer>();
         ArrayList<PatientContact> patientContactList = new ArrayList<PatientContact>();
         try{
-            ps = con.prepareStatement("Select PatientID FROM Patients P Where not EXISTS (SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) EXCEPT (select PatientID FROM Patients P  EXCEPT (SELECT FK_PatientID from Contacts))");
+            ps = con.prepareStatement("Select PatientID FROM Patients P Where not EXISTS (SELECT AppointmentID from Appointments A where A.FK_PatientID = P.PatientID) Minus (select PatientID FROM Patients P  Minus (SELECT FK_PatientID from contacts))");
             rs = ps.executeQuery();
             while(rs.next()){
                int patientId = rs.getInt("PatientID");
@@ -255,7 +255,7 @@ public class PatientPage {
                 ps.setInt(1, patientId);
                 rs = ps.executeQuery();
                 rs.next();
-                PatientContact patientContact = new PatientContact(rs.getInt("PatientID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),rs.getLong("PhoneNumber"));
+                PatientContact patientContact = new PatientContact(rs.getInt("PatientID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"), rs.getLong("PhoneNumber"));
                 patientContactList.add(patientContact);
             }
             ps.close();
