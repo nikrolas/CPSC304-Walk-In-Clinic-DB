@@ -10,14 +10,12 @@ public class Patient{
     private String lastName;
     private String gender;
 
-
-
     public Patient( int patientID, String firstName, String lastName, String gender){
         this.patientID = patientID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-
+        this.patientID = patientID;
     }
 
     public String getFirstName() {
@@ -31,6 +29,14 @@ public class Patient{
 
     public String getLastName() {
         return lastName;
+    }
+    
+    public int getPatientID(){
+    	return patientID;
+    }
+    
+    public void setPatientID(int patientID){
+    	this.patientID = patientID;
     }
 
     public void setGender(String gender) {

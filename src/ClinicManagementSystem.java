@@ -151,10 +151,10 @@ public class ClinicManagementSystem
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String firstName = prescriptionFrame.getFirstName();
-				String lastName = prescriptionFrame.getLastName();
-				foundPrescriptions = prescriptionPage.getPatientPrescriptions(firstName, lastName);
-				prescriptionFrame.setResults(foundPrescriptions);
+				int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
+				int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
+				foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
+				prescriptionFrame.setResults(foundPrescriptions, totalPrescriptions);
 				prescriptionFrame.repaint();
 			}
 		});
@@ -180,15 +180,16 @@ public class ClinicManagementSystem
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String firstName = patientDoctorFrame.getFirstName();
-				String lastName = patientDoctorFrame.getLastName();
-				if(firstName.equals("") && lastName.equals("")){
-					System.out.println("show all patients\n");
-					foundPatients = patientPage.getPatients();
+				if(!patientDoctorFrame.getPatientID().equals("")){
+					int patientID = Integer.parseInt(patientDoctorFrame.getPatientID());	
+					
+					System.out.println("Searching for a patient\n");
+					foundPatients = patientPage.getPatient(patientID);
+					
+					
 				}
 				else{
-					System.out.println("Searching for a patient\n");
-					foundPatients = patientPage.getPatient(patientDoctorFrame.getFirstName(), patientDoctorFrame.getLastName());
+					foundPatients = patientPage.getPatients();
 				}
 				patientDoctorFrame.setResults(foundPatients);
 				patientDoctorFrame.repaint();
