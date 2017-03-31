@@ -166,12 +166,14 @@ public class PatientPage {
         ResultSet rs;
 
         try {
+
+            /*
             ps = con.prepareStatement("SELECT * FROM InsuranceProviders  WHERE " + "InsuranceProviderName = ?");
             ps.setString(1, InsuranceProviderName);
             rs = ps.executeQuery();
             rs.next();
             int insuranceProviderID = rs.getInt("InsuranceProviderID");
-            ps.close();
+            */
 
             String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?)";
 
@@ -180,10 +182,9 @@ public class PatientPage {
             ps.setString(2, firstName);
             ps.setString(3, lastName);
             ps.setString(4, gender);
-            ps.setInt(5, insuranceProviderID);
+            ps.setInt(5, 1);
             ps.executeUpdate();
-            ps.close();
-
+/*
             Random random = new Random();
             int contactID = random.nextInt();
             SQL = "INSERT INTO Contacts VALUES (?,?,?,?,?,?,?,?,?)";
@@ -199,15 +200,16 @@ public class PatientPage {
             ps.setInt(8, (Integer) phoneNumber);
             ps.setString(9,  notes);
             ps.executeUpdate();
+
+            */
             ps.close();
         }
         catch (SQLException ex){
             System.out.println("Message: "+ex.getMessage());
-
         }
     }
 
-    //Delete patient + Contact Info to database
+    //Delete patient + Contact Info from the database
     public void deletePatient(int patientID){
         PreparedStatement ps;
         ResultSet rs;
