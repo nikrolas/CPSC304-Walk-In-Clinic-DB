@@ -11,13 +11,19 @@ public class Prescription{
     Date medStartDate;
     Date medEndDate;
     String genericOK;
+    int medicationID;
 
 
-    public Prescription( int doseage, Date medStartDate, Date medEndDate, String genericOK){
+    public Prescription( int doseage, Date medStartDate, Date medEndDate, String genericOK, int medicationID){
         this.doseage = doseage;
         this.medStartDate = medStartDate;
         this.medEndDate = medEndDate;
         this.genericOK = genericOK;
+        this.medicationID = medicationID;
+    }
+    
+    public int getMedicationID(){
+    	return medicationID;
     }
 
     public String getGenericOK() {

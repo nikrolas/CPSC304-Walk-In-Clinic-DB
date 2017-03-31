@@ -149,7 +149,10 @@ public class ClinicManagementSystem
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!prescriptionFrame.getPatientID().equals("")){
+				if(prescriptionFrame.getPatientID().matches(".*[a-zA-Z]+.*")){
+					return;
+				}
+				else if(!prescriptionFrame.getPatientID().equals("")){
 					int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
 					int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
 					foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);

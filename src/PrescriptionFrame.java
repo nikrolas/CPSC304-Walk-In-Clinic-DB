@@ -69,7 +69,7 @@ public class PrescriptionFrame extends JFrame {
              rs = ps.executeQuery();
              while (rs.next()) {
              	System.out.println("Next?\n");
-                 Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
+                 Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"), rs.getInt("FK_MedicationID"));
                  prescriptionList.add(prescription);
              }
              System.out.println("Result set depleted\n");
@@ -88,10 +88,10 @@ public class PrescriptionFrame extends JFrame {
 		for(int i = 0; i < numRows; i++){
 			model.removeRow(0);
 		}
-		model.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});
+		model.addRow(new Object[]{"MedicationID","Doseage", "Start Date", "End Date", "Generic OK"});
 
 		for(Prescription prescription : prescriptionList){
-			model.addRow(new Object[]{prescription.getDoseage(), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
+			model.addRow(new Object[]{prescription.getMedicationID(),prescription.getDoseage(), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
 		}
 		prescriptionListTable.setModel(model);
     }
@@ -233,7 +233,7 @@ public class PrescriptionFrame extends JFrame {
 		contentPane.add(totalPrescriptions, gbc_totalPrescriptions);
 		
 		listModel = new DefaultTableModel(columnNames, 0);
-		listModel.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});
+		listModel.addRow(new Object[]{"MedicationID","Doseage", "Start Date", "End Date", "Generic OK"});
 		prescriptionListTable = new JTable(listModel);
 		GridBagConstraints gbc_prescriptionListTable = new GridBagConstraints();
 		gbc_prescriptionListTable.insets = new Insets(0, 0, 0, 5);

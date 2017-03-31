@@ -34,7 +34,7 @@ public class PrescriptionPage {
             rs = ps.executeQuery();
             while (rs.next()) {
             	System.out.println("Next?\n");
-                Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
+                Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"), rs.getInt("FK_MedicationID"));
                 prescriptonList.add(prescription);
                 patientID = rs.getInt("PatientID");
             }
