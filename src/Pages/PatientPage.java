@@ -252,8 +252,8 @@ public class PatientPage {
 
             for (Integer patientId : patientIds) {
                 ps = con.prepareStatement("SELECT * FROM Patients, Contacts WHERE PatientID = ? AND FK_PatientID = PatientID");
-                rs = ps.executeQuery();
                 ps.setInt(1, patientId);
+                rs = ps.executeQuery();
                 rs.next();
                 PatientContact patientContact = new PatientContact(rs.getInt("PatientID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),rs.getLong("PhoneNumber"));
                 patientContactList.add(patientContact);
