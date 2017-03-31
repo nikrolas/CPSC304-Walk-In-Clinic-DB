@@ -138,7 +138,7 @@ public class PatientPage {
         		province = oldContact.getProvince();
         	}
         	if(phoneNumber == -1){
-        		phoneNumber = oldContact.getPhoneNumber();
+        		//phoneNumber = oldContact.getPhoneNumber();
         	}
         	if(notes.equals("")){
         		notes = oldContact.getNotes();

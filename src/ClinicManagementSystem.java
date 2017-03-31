@@ -129,28 +129,6 @@ public class ClinicManagementSystem
 		menuFrame.setVisible(true);
 	}
 	
-	/*private void showPatientUpdate(){
-		patientPage = new PatientPage(con);
-		patientUpdateFrame = new PatientUpdateFrame();
-		patientUpdateFrame.setBackListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				patientUpdateFrame.dispose();
-				showMenu();
-			}
-		});
-		
-		patientUpdateFrame.setUpdateListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		patientUpdateFrame.setVisible(true);
-	}*/
 	/*
 	 * Show the prescription page
 	 */
@@ -229,12 +207,18 @@ public class ClinicManagementSystem
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!patientDoctorFrame.getPatientID().equals("")){
+				if(patientDoctorFrame.getPatientID().matches(".*[a-zA-Z]+.*")){
+					return;
+				}
+				else if(!patientDoctorFrame.getPatientID().equals("")){
 					int patientID = Integer.parseInt(patientDoctorFrame.getPatientID());	
 					
 					System.out.println("Searching for a patient\n");
 					foundPatients = patientPage.getPatient(patientID);
 					
+					
+				}
+				if(patientDoctorFrame.getPatientID().matches("^[a-zA-Z]+$")){
 					
 				}
 				else{
