@@ -1,17 +1,14 @@
 
 // We need to import the java.sql package to use JDBC
-import java.awt.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.*;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
 import Database.Patient;
 import Database.Prescription;
 import Pages.PatientPage;
 import Pages.PrescriptionPage;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.util.ArrayList;
 
 
 /*
@@ -27,8 +24,6 @@ public class ClinicManagementSystem
 	private Connection con;
 
 	private LoginFrame loginFrame;
-
-
 
 	public enum userTypes {
 		DOCTOR, RECEPTIONIST, UNDEFINED
@@ -235,7 +230,7 @@ public class ClinicManagementSystem
 	 */
 	private void showAppointmentWindow() {
 		System.out.println("Show appointment window...\n");
-		appointmentForm = new AppointmentForm();
+		appointmentForm = new AppointmentForm(con);
 		appointmentForm.setBackListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -244,13 +239,14 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
-		appointmentForm.setVisible(true);
-		appointmentForm.setTable(con);
+		appointmentForm.setTable();
+        appointmentForm.setVisible(true);
 
-	}
+
+    }
 	private void showPatientInfo() {
 		System.out.println("Show patient window...\n");
-		patientInfo = new PatientReceptionistFrame();
+		patientInfo = new PatientReceptionistFrame(con);
 		patientInfo.setBackListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -259,7 +255,7 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
-		patientInfo.setConnection(con);
+		patientInfo.setTable();
 		patientInfo.setVisible(true);
 
 	}
@@ -290,9 +286,9 @@ public class ClinicManagementSystem
      */
 	public boolean authenticate(String username, String password){
 		System.out.println("Username: "+ username + ", Password: "+ password);
-		int userID;
 		String userName;
 		ResultSet rs;
+		int userID;
 		PreparedStatement ps;
 		try{
 			ps = con.prepareStatement("SELECT * FROM USERS WHERE " +

@@ -39,7 +39,9 @@ public class AppointmentPage {
     private Connection con;
     private final DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
 
-    
+    public AppointmentPage(Connection con) {
+        this.con = con;
+    }
 
     // Get Appointments by Time, Date and Patient Name
     public ArrayList<Appointment> getAppointmentsbyDoctor(Date appointmentDate, Number appointmentTime, int patientID){
