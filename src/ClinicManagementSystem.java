@@ -198,6 +198,7 @@ public class ClinicManagementSystem
 		System.out.println("Show patient window\n");
 		patientPage = new PatientPage(con);
 		patientDoctorFrame = new PatientDoctorFrame();
+		patientDoctorFrame.listPatientsWithoutAppointments(patientPage.getPatients());
 		patientDoctorFrame.setBackListener(new ActionListener() {
 
 			@Override
