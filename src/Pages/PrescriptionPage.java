@@ -32,12 +32,13 @@ public class PrescriptionPage {
             ps = con.prepareStatement("SELECT * FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "PatientID = ?");
             ps.setInt(1, patientID);
             rs = ps.executeQuery();
-
             while (rs.next()) {
+            	System.out.println("Next?\n");
                 Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
                 prescriptonList.add(prescription);
                 patientID = rs.getInt("PatientID");
             }
+            System.out.println("Result set depleted\n");
             ps.close();
             getTotalPrescriptions(patientID);
         }

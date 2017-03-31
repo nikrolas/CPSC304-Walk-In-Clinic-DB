@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import Database.Patient;
+import Database.Prescription;
 import Pages.PatientPage;
 import Pages.PrescriptionPage;
 
@@ -48,6 +49,8 @@ public class ClinicManagementSystem
 	private PatientReceptionistFrame patientInfo;
 
 	private ArrayList<Patient> foundPatients;
+	
+	private ArrayList<Prescription> foundPrescriptions;
 	
 
 
@@ -106,7 +109,6 @@ public class ClinicManagementSystem
 					case(2):
 						menuFrame.dispose();
 						showAppointmentWindow();
-						//show appointments...
 						break;
 					case(3):
 						menuFrame.dispose();
@@ -145,7 +147,17 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
-		
+		prescriptionFrame.setSearchListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String firstName = prescriptionFrame.getFirstName();
+				String lastName = prescriptionFrame.getLastName();
+				foundPrescriptions = prescriptionPage.getPatientPrescriptions(firstName, lastName);
+				prescriptionFrame.setResults(foundPrescriptions);
+				prescriptionFrame.repaint();
+			}
+		});
 		prescriptionFrame.setVisible(true);
 	}
 
@@ -215,6 +227,7 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
+		patientInfo.setConnection(con);
 		patientInfo.setVisible(true);
 
 	}
