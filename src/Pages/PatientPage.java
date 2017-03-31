@@ -19,7 +19,6 @@ public class PatientPage {
     	this.con = con;
     }
 
-
     // For doctors + Receptionists all patients
     public ArrayList<Patient> getPatients(){
         ResultSet rs;
@@ -29,7 +28,7 @@ public class PatientPage {
             ps = con.prepareStatement("SELECT * FROM PATIENTS");
             rs = ps.executeQuery();
             while(rs.next()){
-                Patient patient = new Patient(rs.getString("firstName"),rs.getString("lastName"), rs.getString("gender"));
+                Patient patient = new Patient(rs.getInt("PatientID"),rs.getString("firstName"),rs.getString("lastName"), rs.getString("gender"));
                 patientList.add(patient);
             }
             ps.close();
@@ -44,29 +43,19 @@ public class PatientPage {
 
     // For doctors + Receptionists get specific patient by Name, may get multiple
     // Selection and projection query
-    public ArrayList<Patient> getPatient(String firstName, String lastName){
+    public ArrayList<Patient> getPatient(int patientID){
         ResultSet rs;
         ArrayList<Patient> patientList = new ArrayList<Patient>();
         PreparedStatement ps;
 
         try{
-        	if( firstName.equals("") ) {
-        		ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.lastName = ?");
-        		ps.setString(1, lastName);
-        	}
-        	else if( lastName.equals("")) {
-        		ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE "+ "p.firstName = ?"); 
-        		ps.setString(1, firstName);
-        	}
-        	else {
-	            ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.firstName = ? AND p.lastName = ?");
-	            ps.setString(1,firstName);
-	            ps.setString(2,lastName);
-        	}
+        		ps = con.prepareStatement("SELECT * FROM PATIENTS p WHERE " + "p.PatientID = ?");
+        		ps.setInt(1, patientID);
+
             rs = ps.executeQuery();
 
             while(rs.next()){
-               Patient patient = new Patient(rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"));
+               Patient patient = new Patient(rs.getInt("PatientID"),rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Gender"));
                patientList.add(patient);
             }
             ps.close();
@@ -82,23 +71,16 @@ public class PatientPage {
 
     //Update Patient and Contact Info
     // Update operation
-    public void updatePatient(String oldFirstName, String oldLastName, String newFirstName, String newLastName,Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void updatePatient(int patientID, String firstName, String lastName, Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
         ResultSet rs;
         ArrayList<Patient> patientList = new ArrayList<Patient>();
         PreparedStatement ps;
-        int patientID;
 
         try{
-            ps = con.prepareStatement("SELECT * FROM PATIENTS WHERE " + "FirstName= ? AND LastName = ?");
-            ps.setString(1,oldFirstName);
-            ps.setString(2,oldLastName);
-            rs = ps.executeQuery();
-            patientID = rs.getInt("PatientID");
-            ps.close();
 
             ps = con.prepareStatement("update Patients set FirstName = ?,  LastName = ? where PatientID = ?");
-            ps.setString(1,newFirstName);
-            ps.setString(2,newLastName);
+            ps.setString(1,firstName);
+            ps.setString(2,lastName);
             ps.setInt(3,patientID);
             ps.executeUpdate();
             ps.close();
@@ -122,7 +104,7 @@ public class PatientPage {
     }
 
     //Adds patient + Contact Info to database
-    public void addPatient(String firstName, String lastName, String gender, String InsuranceProviderName, int PatientPrescriptionID,  Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
+    public void addPatient(int patientID, String firstName, String lastName, String gender, String InsuranceProviderName, int PatientPrescriptionID,  Number aptHouseNumber,String street, String city, String postalCode, String province, Number phoneNumber, String notes){
         PreparedStatement ps;
         ResultSet rs;
 
@@ -133,9 +115,6 @@ public class PatientPage {
             int insuranceProviderID = rs.getInt("InsuranceProviderID");
             ps.close();
 
-
-            Random random = new Random();
-            int patientID = random.nextInt();
             String SQL = "INSERT INTO Patients VALUES (?,?,?,?,?,?)";
 
             ps = con.prepareStatement(SQL);
@@ -149,13 +128,13 @@ public class PatientPage {
             ps.executeUpdate();
             ps.close();
 
-             random = new Random();
+            Random random = new Random();
             int contactID = random.nextInt();
             SQL = "INSERT INTO Contacts VALUES (?,?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(SQL);
 
             ps.setInt(1, contactID);
-            ps.setInt(2,patientID);
+            ps.setInt(2, patientID);
             ps.setInt(3, (Integer) aptHouseNumber);
             ps.setString(4, street);
             ps.setString(5, city);
@@ -173,23 +152,15 @@ public class PatientPage {
     }
 
     //Delete patient + Contact Info to database
-    public void deletePatient(String firstName, String lastName){
+    public void deletePatient(int patientID){
         PreparedStatement ps;
         ResultSet rs;
 
         try {
-            ps = con.prepareStatement("SELECT * FROM PATIENTS WHERE " + "FirstName= ? AND LastName = ?");
-            ps.setString(1,firstName);
-            ps.setString(2,lastName);
-            rs = ps.executeQuery();
-            int patientID = rs.getInt("PatientID");
-            ps.close();
-
-            String sql = "DELETE FROM Patients  WHERE " + "FirstName = ? AND LastName = ?" ;
+            String sql = "DELETE FROM Patients  WHERE " + "PatientID = ?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1,  firstName);
-            ps.setString(2, lastName );
+            ps.setInt(1,  patientID);
             ps.executeUpdate();
             ps.close();
 
@@ -205,12 +176,6 @@ public class PatientPage {
             System.out.println("Message: "+ex.getMessage());
         }
     }
-
-
-
-
-
-
 
 
 }

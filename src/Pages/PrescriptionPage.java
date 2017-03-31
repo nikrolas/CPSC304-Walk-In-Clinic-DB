@@ -20,18 +20,17 @@ public class PrescriptionPage {
     public PrescriptionPage(Connection con){
     	this.con = con;
     }
+
     // For doctors get specific patient's prescriptions;
     // Inner Join
-    public ArrayList<Prescription> getPatientPrescriptions(String firstName, String lastName){
+    public ArrayList<Prescription> getPatientPrescriptions(int patientID){
         ResultSet rs;
         PreparedStatement ps;
         ArrayList<Prescription> prescriptonList = new ArrayList<Prescription>();
-        int patientID = 0;
 
         try {
-            ps = con.prepareStatement("SELECT * FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "FirstName = ? AND LastName = ?");
-            ps.setString(1, firstName);
-            ps.setString(2, lastName);
+            ps = con.prepareStatement("SELECT * FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "PatientID = ?");
+            ps.setInt(1, patientID);
             rs = ps.executeQuery();
 
             while (rs.next()) {
