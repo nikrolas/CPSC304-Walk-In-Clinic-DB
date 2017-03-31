@@ -55,6 +55,7 @@ public class PrescriptionFrame extends JFrame {
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
 		table.setModel(model);
+		totalPrescriptionField.setText( Integer.toString( prescriptions.size() ) );
 		
 	}
 
