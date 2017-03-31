@@ -183,6 +183,28 @@ public class ClinicManagementSystem
 				}
 			}
 		});
+		prescriptionFrame.setSelectionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String result = "";
+				switch(prescriptionFrame.getSelection()){
+				case(1):
+					result = prescriptionPage.getMaxorMinMedications("max");
+					break;
+				case(2):
+					result = prescriptionPage.getMaxorMinMedications("min");
+					break;
+				default:
+					break;
+				}
+				System.out.println("Max or min was: "+ result);
+				prescriptionFrame.setMaxMinPrescription(result);
+				prescriptionFrame.repaint();
+			}
+				
+			
+		});
 		prescriptionFrame.setVisible(true);
 	}
 

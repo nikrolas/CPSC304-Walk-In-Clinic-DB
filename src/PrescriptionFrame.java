@@ -20,6 +20,7 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class PrescriptionFrame extends JFrame {
 
@@ -36,11 +37,20 @@ public class PrescriptionFrame extends JFrame {
     private JLabel totalPrescriptions;
     private JTextField totalPrescriptionField;
     private JButton btnSearch;
+    private JComboBox prescriptionSwitch;
+    private JTextField maxMinPrescriptionField;
 
     public void setTotalPrescriptions(int totalPrescriptions){
     	totalPrescriptionField.setText(Integer.toString(totalPrescriptions));
     }
-
+    
+    public int getSelection(){
+    	return prescriptionSwitch.getSelectedIndex();
+    }
+    
+    public void setMaxMinPrescription(String maxOrMinPrescriptions){
+    	maxMinPrescriptionField.setText(maxOrMinPrescriptions);
+    }
     
     public void setResults(ArrayList<Prescription> prescriptions, int totalPrescriptions){
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -63,6 +73,9 @@ public class PrescriptionFrame extends JFrame {
 		mntmBack.addActionListener(al);
 	}
 	
+	public void setSelectionListener(ActionListener al){
+		prescriptionSwitch.addActionListener(al);
+	}
 	public void setSearchListener(ActionListener al){
 		btnSearch.addActionListener(al);
 		patientIDField.addActionListener(al);
@@ -80,7 +93,7 @@ public class PrescriptionFrame extends JFrame {
 	 */
 	public PrescriptionFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 754, 458);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -92,9 +105,9 @@ public class PrescriptionFrame extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		patientIDLabel = new JLabel("Enter Patient ID:");
@@ -121,8 +134,20 @@ public class PrescriptionFrame extends JFrame {
 		GridBagConstraints gbc_lblTotalPrescriptions = new GridBagConstraints();
 		gbc_lblTotalPrescriptions.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTotalPrescriptions.gridx = 0;
-		gbc_lblTotalPrescriptions.gridy = 2;
+		gbc_lblTotalPrescriptions.gridy = 1;
 		contentPane.add(lblTotalPrescriptions, gbc_lblTotalPrescriptions);
+		
+		totalPrescriptionField = new JTextField();
+		totalPrescriptionField.setEditable(false);
+		totalPrescriptionField.setText("0");
+		GridBagConstraints gbc_totalPrescriptionField = new GridBagConstraints();
+		gbc_totalPrescriptionField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_totalPrescriptionField.anchor = GridBagConstraints.NORTH;
+		gbc_totalPrescriptionField.insets = new Insets(0, 0, 5, 5);
+		gbc_totalPrescriptionField.gridx = 0;
+		gbc_totalPrescriptionField.gridy = 2;
+		contentPane.add(totalPrescriptionField, gbc_totalPrescriptionField);
+		totalPrescriptionField.setColumns(10);
 		
 		btnSearch = new JButton("Search");
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
@@ -131,29 +156,35 @@ public class PrescriptionFrame extends JFrame {
 		gbc_btnSearch.gridy = 2;
 		contentPane.add(btnSearch, gbc_btnSearch);
 		
+		String[] options = {"------","Max Prescriptions","Min Prescriptions"};
+
+		prescriptionSwitch = new JComboBox<Object>(options);
+		GridBagConstraints gbc_prescriptionSwitch = new GridBagConstraints();
+		gbc_prescriptionSwitch.insets = new Insets(10, 10, 10, 10);
+		gbc_prescriptionSwitch.gridx = 0;
+		gbc_prescriptionSwitch.gridy = 3;
+		contentPane.add(prescriptionSwitch, gbc_prescriptionSwitch);
+		
+		maxMinPrescriptionField = new JTextField();
+		GridBagConstraints gbc_maxMinPrescriptionField = new GridBagConstraints();
+		gbc_maxMinPrescriptionField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_maxMinPrescriptionField.insets = new Insets(0, 0, 5, 5);
+		gbc_maxMinPrescriptionField.gridx = 0;
+		gbc_maxMinPrescriptionField.gridy = 4;
+		contentPane.add(maxMinPrescriptionField, gbc_maxMinPrescriptionField);
+		maxMinPrescriptionField.setColumns(10);
+		
 		totalPrescriptions = new JLabel("");
 		GridBagConstraints gbc_totalPrescriptions = new GridBagConstraints();
 		gbc_totalPrescriptions.insets = new Insets(0, 0, 5, 0);
 		gbc_totalPrescriptions.gridx = 1;
-		gbc_totalPrescriptions.gridy = 3;
+		gbc_totalPrescriptions.gridy = 5;
 		contentPane.add(totalPrescriptions, gbc_totalPrescriptions);
-		
-		totalPrescriptionField = new JTextField();
-		totalPrescriptionField.setEditable(false);
-		totalPrescriptionField.setText("0");
-		GridBagConstraints gbc_totalPrescriptionField = new GridBagConstraints();
-		gbc_totalPrescriptionField.anchor = GridBagConstraints.NORTH;
-		gbc_totalPrescriptionField.insets = new Insets(0, 0, 0, 5);
-		gbc_totalPrescriptionField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_totalPrescriptionField.gridx = 0;
-		gbc_totalPrescriptionField.gridy = 4;
-		contentPane.add(totalPrescriptionField, gbc_totalPrescriptionField);
-		totalPrescriptionField.setColumns(10);
 		table = new JTable(model);		
 		GridBagConstraints gbc_table = new GridBagConstraints();
 		gbc_table.fill = GridBagConstraints.BOTH;
 		gbc_table.gridx = 1;
-		gbc_table.gridy = 4;
+		gbc_table.gridy = 6;
 		contentPane.add(table, gbc_table);
 	}
 
