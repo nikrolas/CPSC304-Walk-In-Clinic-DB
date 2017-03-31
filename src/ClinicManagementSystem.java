@@ -205,6 +205,8 @@ public class ClinicManagementSystem
 				
 			
 		});
+		
+		prescriptionFrame.listAllPrescriptions(con);
 		prescriptionFrame.setVisible(true);
 	}
 

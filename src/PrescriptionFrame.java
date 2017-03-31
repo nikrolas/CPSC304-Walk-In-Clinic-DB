@@ -10,6 +10,10 @@ import Database.Prescription;
 
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JMenuBar;
@@ -32,6 +36,7 @@ public class PrescriptionFrame extends JFrame {
 	private JLabel lblTotalPrescriptions;
 	
     private DefaultTableModel model;
+    private DefaultTableModel listModel;
     
     Object[] columnNames = {"Doseage", "Start Date", "End Date", "Generic OK"};
     private JLabel totalPrescriptions;
@@ -39,6 +44,8 @@ public class PrescriptionFrame extends JFrame {
     private JButton btnSearch;
     private JComboBox prescriptionSwitch;
     private JTextField maxMinPrescriptionField;
+    private JLabel lblHighestOrLowest;
+    private JTable prescriptionListTable;
 
     public void setTotalPrescriptions(int totalPrescriptions){
     	totalPrescriptionField.setText(Integer.toString(totalPrescriptions));
@@ -50,6 +57,43 @@ public class PrescriptionFrame extends JFrame {
     
     public void setMaxMinPrescription(String maxOrMinPrescriptions){
     	maxMinPrescriptionField.setText(maxOrMinPrescriptions);
+    }
+    
+    public void listAllPrescriptions(Connection con){
+    	 ResultSet rs;
+         PreparedStatement ps;
+         ArrayList<Prescription> prescriptionList = new ArrayList<Prescription>();
+
+         try {
+             ps = con.prepareStatement("SELECT * FROM PRESCRIPTIONS");
+             rs = ps.executeQuery();
+             while (rs.next()) {
+             	System.out.println("Next?\n");
+                 Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
+                 prescriptionList.add(prescription);
+             }
+             System.out.println("Result set depleted\n");
+             ps.close();
+         }
+         catch(SQLException ex)
+         {
+             System.out.println("Message: "+ex.getMessage());
+         }
+         setAllPrescriptions(prescriptionList);
+    }
+    
+    private void setAllPrescriptions(ArrayList<Prescription> prescriptionList){
+    	DefaultTableModel model = (DefaultTableModel) prescriptionListTable.getModel();
+    	int numRows = model.getRowCount();
+		for(int i = 0; i < numRows; i++){
+			model.removeRow(0);
+		}
+		model.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});
+
+		for(Prescription prescription : prescriptionList){
+			model.addRow(new Object[]{prescription.getDoseage(), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
+		}
+		prescriptionListTable.setModel(model);
     }
     
     public void setResults(ArrayList<Prescription> prescriptions, int totalPrescriptions){
@@ -105,9 +149,9 @@ public class PrescriptionFrame extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		patientIDLabel = new JLabel("Enter Patient ID:");
@@ -174,17 +218,35 @@ public class PrescriptionFrame extends JFrame {
 		contentPane.add(maxMinPrescriptionField, gbc_maxMinPrescriptionField);
 		maxMinPrescriptionField.setColumns(10);
 		
+		lblHighestOrLowest = new JLabel("Highest or Lowest Average doseage for all medications");
+		GridBagConstraints gbc_lblHighestOrLowest = new GridBagConstraints();
+		gbc_lblHighestOrLowest.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHighestOrLowest.gridx = 0;
+		gbc_lblHighestOrLowest.gridy = 5;
+		contentPane.add(lblHighestOrLowest, gbc_lblHighestOrLowest);
+		
 		totalPrescriptions = new JLabel("");
 		GridBagConstraints gbc_totalPrescriptions = new GridBagConstraints();
 		gbc_totalPrescriptions.insets = new Insets(0, 0, 5, 0);
 		gbc_totalPrescriptions.gridx = 1;
-		gbc_totalPrescriptions.gridy = 5;
+		gbc_totalPrescriptions.gridy = 6;
 		contentPane.add(totalPrescriptions, gbc_totalPrescriptions);
+		
+		listModel = new DefaultTableModel(columnNames, 0);
+		listModel.addRow(new Object[]{"Doseage", "Start Date", "End Date", "Generic OK"});
+		prescriptionListTable = new JTable(listModel);
+		GridBagConstraints gbc_prescriptionListTable = new GridBagConstraints();
+		gbc_prescriptionListTable.insets = new Insets(0, 0, 0, 5);
+		gbc_prescriptionListTable.fill = GridBagConstraints.BOTH;
+		gbc_prescriptionListTable.gridx = 0;
+		gbc_prescriptionListTable.gridy = 7;
+		
+		contentPane.add(prescriptionListTable, gbc_prescriptionListTable);
 		table = new JTable(model);		
 		GridBagConstraints gbc_table = new GridBagConstraints();
 		gbc_table.fill = GridBagConstraints.BOTH;
 		gbc_table.gridx = 1;
-		gbc_table.gridy = 6;
+		gbc_table.gridy = 7;
 		contentPane.add(table, gbc_table);
 	}
 
