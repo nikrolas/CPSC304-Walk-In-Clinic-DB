@@ -152,8 +152,9 @@ public class ClinicManagementSystem
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
+				int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
 				foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
-				prescriptionFrame.setResults(foundPrescriptions);
+				prescriptionFrame.setResults(foundPrescriptions, totalPrescriptions);
 				prescriptionFrame.repaint();
 			}
 		});

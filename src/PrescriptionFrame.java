@@ -42,7 +42,7 @@ public class PrescriptionFrame extends JFrame {
     }
 
     
-    public void setResults(ArrayList<Prescription> prescriptions){
+    public void setResults(ArrayList<Prescription> prescriptions, int totalPrescriptions){
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		int numRows = model.getRowCount();
 		for(int i = 0; i < numRows; i++){
@@ -55,7 +55,7 @@ public class PrescriptionFrame extends JFrame {
 		}
 		System.out.println("Rowcount is now: "+model.getRowCount());
 		table.setModel(model);
-		totalPrescriptionField.setText( Integer.toString( prescriptions.size() ) );
+		totalPrescriptionField.setText( Integer.toString( totalPrescriptions ) );
 		
 	}
 

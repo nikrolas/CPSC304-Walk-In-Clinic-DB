@@ -40,7 +40,6 @@ public class PrescriptionPage {
             }
             System.out.println("Result set depleted\n");
             ps.close();
-            getTotalPrescriptions(patientID);
         }
         catch(SQLException ex)
         {
@@ -51,7 +50,7 @@ public class PrescriptionPage {
 
     //Get Number of Prescriptions for Patient
     // Aggregation query
-    private int getTotalPrescriptions(int patientID){
+    public int getTotalPrescriptions(int patientID){
         ResultSet rs;
         PreparedStatement ps;
         int totalPrescriptions = 0;
@@ -59,6 +58,7 @@ public class PrescriptionPage {
             ps = con.prepareStatement("SELECT COUNT (*) as Total FROM PATIENTS INNER JOIN Prescriptions ON PatientID = FK_PatientPrescriptionID INNER JOIN Medications ON FK_MedicationID = MedicationID WHERE " + "PatientID = ? ");
             ps.setInt(1, patientID);
             rs = ps.executeQuery();
+            rs.next();
             totalPrescriptions = rs.getInt("Total");
             ps.close();
         }
