@@ -5,13 +5,15 @@ package Database;// We need to import the java.sql package to use JDBC
 
 public class Patient{
 
+    private int patientID;
     private String firstName;
     private String lastName;
     private String gender;
 
 
 
-    public Patient( String firstName, String lastName, String gender){
+    public Patient( int patientID, String firstName, String lastName, String gender){
+        this.patientID = patientID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
