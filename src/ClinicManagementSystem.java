@@ -227,6 +227,7 @@ public class ClinicManagementSystem
 				showMenu();
 			}
 		});
+		patientInfo.setConnection(con);
 		patientInfo.setVisible(true);
 
 	}
