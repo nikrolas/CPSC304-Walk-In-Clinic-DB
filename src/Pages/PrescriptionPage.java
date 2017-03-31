@@ -34,7 +34,7 @@ public class PrescriptionPage {
             rs = ps.executeQuery();
             while (rs.next()) {
             	System.out.println("Next?\n");
-                Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"));
+                Prescription prescription = new Prescription(rs.getInt("Doseage"),  rs.getDate("MedStartDate"), rs.getDate("MedEndDate"), rs.getString("GenericOK"), rs.getInt("FK_MedicationID"));
                 prescriptonList.add(prescription);
                 patientID = rs.getInt("PatientID");
             }
@@ -76,21 +76,23 @@ public class PrescriptionPage {
     public String getMaxorMinMedications(String maxMin){
         ResultSet rs;
         PreparedStatement ps ;
-        String medication = null;
+        String medication = "";
 
         try {
             if (maxMin.equals("min")){
             ps = con.prepareStatement("SELECT  MIN(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
             }
-            if(maxMin.equals("max")){
-                ps = con.prepareStatement("SELECT  MedicationName, MAX(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");
+
+            else if(maxMin.equals("max")){
+                ps = con.prepareStatement("SELECT  MAX(AVG(Doseage)) FROM Prescriptions GROUP BY FK_MedicationID");           
             }
             else{
                 throw new SQLException("Didn't receive Max or Min");
             }
             rs = ps.executeQuery();
             rs.next();
-            medication = rs.getString("MedicationName");
+            medication = rs.getString(1);
+
             ps.close();
 
         }

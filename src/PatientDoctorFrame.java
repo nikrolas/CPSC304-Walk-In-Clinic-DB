@@ -89,7 +89,7 @@ public class PatientDoctorFrame extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		JLabel firstNameLabel = new JLabel("Enter patient first name:");
+		JLabel firstNameLabel = new JLabel("Enter patient ID:");
 		GridBagConstraints gbc_firstNameLabel = new GridBagConstraints();
 		gbc_firstNameLabel.anchor = GridBagConstraints.EAST;
 		gbc_firstNameLabel.insets = new Insets(10, 10, 10, 10);

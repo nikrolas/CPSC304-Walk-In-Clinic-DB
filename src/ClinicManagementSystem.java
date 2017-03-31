@@ -129,28 +129,6 @@ public class ClinicManagementSystem
 		menuFrame.setVisible(true);
 	}
 	
-	/*private void showPatientUpdate(){
-		patientPage = new PatientPage(con);
-		patientUpdateFrame = new PatientUpdateFrame();
-		patientUpdateFrame.setBackListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				patientUpdateFrame.dispose();
-				showMenu();
-			}
-		});
-		
-		patientUpdateFrame.setUpdateListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		patientUpdateFrame.setVisible(true);
-	}*/
 	/*
 	 * Show the prescription page
 	 */
@@ -171,7 +149,10 @@ public class ClinicManagementSystem
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!prescriptionFrame.getPatientID().equals("")){
+				if(prescriptionFrame.getPatientID().matches(".*[a-zA-Z]+.*")){
+					return;
+				}
+				else if(!prescriptionFrame.getPatientID().equals("")){
 					int patientID = Integer.parseInt(prescriptionFrame.getPatientID());
 					int totalPrescriptions = prescriptionPage.getTotalPrescriptions(patientID);
 					foundPrescriptions = prescriptionPage.getPatientPrescriptions(patientID);
@@ -183,6 +164,30 @@ public class ClinicManagementSystem
 				}
 			}
 		});
+		prescriptionFrame.setSelectionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String result = "";
+				switch(prescriptionFrame.getSelection()){
+				case(1):
+					result = prescriptionPage.getMaxorMinMedications("max");
+					break;
+				case(2):
+					result = prescriptionPage.getMaxorMinMedications("min");
+					break;
+				default:
+					break;
+				}
+				System.out.println("Max or min was: "+ result);
+				prescriptionFrame.setMaxMinPrescription(result);
+				prescriptionFrame.repaint();
+			}
+				
+			
+		});
+		
+		prescriptionFrame.listAllPrescriptions(con);
 		prescriptionFrame.setVisible(true);
 	}
 
@@ -205,12 +210,18 @@ public class ClinicManagementSystem
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!patientDoctorFrame.getPatientID().equals("")){
+				if(patientDoctorFrame.getPatientID().matches(".*[a-zA-Z]+.*")){
+					return;
+				}
+				else if(!patientDoctorFrame.getPatientID().equals("")){
 					int patientID = Integer.parseInt(patientDoctorFrame.getPatientID());	
 					
 					System.out.println("Searching for a patient\n");
 					foundPatients = patientPage.getPatient(patientID);
 					
+					
+				}
+				if(patientDoctorFrame.getPatientID().matches("^[a-zA-Z]+$")){
 					
 				}
 				else{
