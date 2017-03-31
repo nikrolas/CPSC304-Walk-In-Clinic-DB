@@ -18,6 +18,10 @@ public class AppointmentPage {
 
     
 
+    public AppointmentPage(Connection con) {
+        this.con = con;
+    }
+
     // Get Appointments by Time, Date and Patient Name
     public ArrayList<Appointment> getAppointmentsbyDoctor(Date appointmentDate, Number appointmentTime, int patientID){
         ResultSet rs;
