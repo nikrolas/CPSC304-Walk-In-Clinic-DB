@@ -89,15 +89,26 @@ public class AppointmentPage {
 
     //Delete Appointment from Database by Time, Date and Patient Name
     //  Delete operation:
-    public void deleteAppointment(Date appointmentDate, Number appointmentTime, int patientID){
+    public void deleteAppointment(String appointmentDate, Number appointmentTime, int patientID){
         PreparedStatement ps;
         ResultSet rs;
 
         try {
+        	 java.util.Date date;
+             java.sql.Date sqlDate;
+             try {
+                 date=df.parse(appointmentDate);
+                 sqlDate = new java.sql.Date(date.getTime());
+                 
+               }
+               catch (Exception e) {     
+                 System.out.println(e.toString() + ", " + appointmentDate);
+                 return;
+               }
             String sql = "DELETE FROM Appointments  WHERE " + "AppointmentDate = ? AND AppointmentTime = ? AND FK_PatientID = ? ";
             ps = con.prepareStatement(sql);
 
-            ps.setDate(1, (java.sql.Date) appointmentDate);
+            ps.setDate(1, sqlDate);
             ps.setInt(2,(Integer) appointmentTime );
             ps.setInt(3,patientID);
             ps.executeUpdate();
