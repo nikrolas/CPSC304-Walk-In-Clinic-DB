@@ -91,7 +91,13 @@ public class PrescriptionFrame extends JFrame {
 		model.addRow(new Object[]{"MedicationID","Doseage", "Start Date", "End Date", "Generic OK"});
 
 		for(Prescription prescription : prescriptionList){
-			model.addRow(new Object[]{prescription.getMedicationID(),prescription.getDoseage(), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
+			if(prescription.getDoseage() == 0){
+				model.addRow(new Object[]{prescription.getMedicationID(),"", prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
+
+			}
+			else{
+			model.addRow(new Object[]{prescription.getMedicationID(),Integer.toString(prescription.getDoseage()), prescription.getMedStartDate(), prescription.getMedEndDate(), prescription.getGenericOK()});
+			}
 		}
 		prescriptionListTable.setModel(model);
     }
