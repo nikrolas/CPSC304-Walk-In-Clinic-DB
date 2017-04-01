@@ -222,9 +222,6 @@ public class ClinicManagementSystem
 					
 					
 				}
-				if(patientDoctorFrame.getPatientID().matches("^[a-zA-Z]+$")){
-					
-				}
 				else{
 					foundPatients = patientPage.getPatients();
 				}
